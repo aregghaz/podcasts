@@ -1,0 +1,19 @@
+.screenPage {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #111111;
+  color: #ffffff;
+}
+
+.screenContent {
+  width: min(100% - 96px, 1180px);
+  margin: 0 auto;
+  padding: 150px 0 96px;
+
+  h1 {
+    margin: 0;
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1;
+  }
+}

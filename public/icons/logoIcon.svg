@@ -1,0 +1,43 @@
+<svg width="944" height="912" viewBox="0 0 944 912" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Microphone / emblem -->
+  <g transform="translate(126 407)">
+    <!-- red headphones / mic stand -->
+    <path d="M10 70 C10 118 42 151 84 151 C126 151 158 118 158 70" stroke="#CF4149" stroke-width="23" stroke-linecap="round"/>
+    <path d="M84 128 C48 128 36 98 36 72 L36 43 C36 20 56 0 84 0 C112 0 132 20 132 43 L132 72 C132 98 120 128 84 128Z" fill="#F5F5F5"/>
+    <clipPath id="micClip">
+      <path d="M84 128 C48 128 36 98 36 72 L36 43 C36 20 56 0 84 0 C112 0 132 20 132 43 L132 72 C132 98 120 128 84 128Z"/>
+    </clipPath>
+    <g clip-path="url(#micClip)">
+      <rect x="36" y="0" width="96" height="53" fill="#2F5AA8"/>
+      <rect x="36" y="53" width="96" height="10" fill="#FFFFFF"/>
+      <rect x="36" y="63" width="96" height="10" fill="#D74449"/>
+      <rect x="36" y="73" width="96" height="10" fill="#FFFFFF"/>
+      <rect x="36" y="83" width="96" height="10" fill="#D74449"/>
+      <rect x="36" y="93" width="96" height="10" fill="#FFFFFF"/>
+      <rect x="36" y="103" width="96" height="10" fill="#D74449"/>
+      <rect x="36" y="113" width="96" height="10" fill="#FFFFFF"/>
+      <rect x="36" y="123" width="96" height="10" fill="#D74449"/>
+
+      <!-- stars simplified -->
+      <g fill="#FFFFFF">
+        <path d="M61 12l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5Z"/>
+        <path d="M84 8l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5Z"/>
+        <path d="M107 12l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5Z"/>
+        <path d="M49 29l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5Z"/>
+        <path d="M73 28l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5Z"/>
+        <path d="M96 28l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5Z"/>
+        <path d="M119 29l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5Z"/>
+        <path d="M60 45l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5Z"/>
+        <path d="M84 44l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5Z"/>
+        <path d="M108 45l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5Z"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Text -->
+  <g font-family="Arial, Helvetica, sans-serif" font-weight="900">
+    <text x="329" y="496" fill="#FFFFFF" font-size="77" letter-spacing="-4">Social Venture</text>
+    <circle cx="698" cy="535" r="4" fill="#CF4149"/>
+    <text x="706" y="541" fill="#BDBDBD" font-size="37" letter-spacing="-1">podcast</text>
+  </g>
+</svg>

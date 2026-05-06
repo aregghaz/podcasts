@@ -1,0 +1,164 @@
+header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  width: 100%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  padding: 0 48px;
+  transition:
+    background 220ms ease,
+    box-shadow 220ms ease,
+    height 220ms ease,
+    transform 220ms ease,
+    backdrop-filter 220ms ease;
+
+  &.fixedHeader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99999;
+    height: 82px;
+    background: rgba(6, 7, 6, 0.74);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.30);
+    backdrop-filter: blur(18px);
+    animation: fixedHeaderIn 220ms ease both;
+  }
+
+  .menuWrapper {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .menuNav {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .menuLink {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    transition: color 180ms ease;
+  }
+
+  .menuLink:hover,
+  .menuLink.active {
+    color: #ffffff;
+  }
+
+  .logoWrapper {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .logoIcon {
+    width: auto;
+    height: 220px;
+    max-width: 100%;
+    display: block;
+    transition: height 220ms ease;
+  }
+
+  &.fixedHeader .logoIcon {
+    height: 170px;
+  }
+
+  .buttonWrapper {
+    width: 40%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+
+  .headerButton {
+    min-width: 118px;
+    height: 42px;
+    padding: 0 20px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    color: #ffffff;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      transform 180ms ease,
+      border-color 180ms ease,
+      background 180ms ease,
+      color 180ms ease;
+  }
+
+  .headerButton:hover {
+    transform: translateY(-1px);
+  }
+
+  .headerButtonGhost {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(14px);
+  }
+
+  .headerButtonGhost:hover {
+    border-color: rgba(255, 255, 255, 0.52);
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .headerButtonPrimary {
+    border-color: #ffffff;
+    background: #ffffff;
+    color: #111111;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+  }
+
+  .headerButtonPrimary:hover {
+    background: #f2f2f2;
+    border-color: #f2f2f2;
+  }
+}
+
+@keyframes fixedHeaderIn {
+  from {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  header {
+    padding: 0 24px;
+
+    .menuNav {
+      gap: 16px;
+    }
+
+    .menuLink {
+      font-size: 13px;
+    }
+
+    .headerButton {
+      min-width: auto;
+      padding: 0 14px;
+      font-size: 13px;
+    }
+  }
+}
