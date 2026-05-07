@@ -3,7 +3,6 @@
 import {
     type MouseEvent,
     type SyntheticEvent,
-    type TouchEvent,
     useCallback,
     useEffect,
     useRef,
@@ -44,8 +43,6 @@ type PodcastShort = {
     videoSrc?: string;
     thumbnailSrc?: string;
 };
-
-type ShortTransitionDirection = "up" | "down" | null;
 
 const podcastShorts: PodcastShort[] = [
     {
@@ -159,6 +156,41 @@ const heroBackgroundVideoSrc = "/videos/heroVideo.mp4";
 const heroBackgroundLoopSeconds = 30;
 const heroBackgroundPlaybackRate = 0.70;
 
+function getYouTubeVideoId(videoSrc: string) {
+    const match = videoSrc.match(
+        /(?:shorts\/|youtu\.be\/|watch\?v=|embed\/)([A-Za-z0-9_-]{6,})/,
+    );
+
+    return match?.[1] ?? "";
+}
+
+function getYouTubeEmbedSrc(videoSrc: string) {
+    const videoId = getYouTubeVideoId(videoSrc);
+
+    if (!videoId) {
+        return videoSrc;
+    }
+
+    const params = new URLSearchParams({
+        autoplay: "1",
+        controls: "0",
+        disablekb: "1",
+        enablejsapi: "1",
+        fs: "0",
+        loop: "1",
+        modestbranding: "1",
+        playsinline: "1",
+        playlist: videoId,
+        rel: "0",
+    });
+
+    if (typeof window !== "undefined") {
+        params.set("origin", window.location.origin);
+    }
+
+    return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+}
+
 function PodcastShortCard({
                               short,
     onOpen,
@@ -244,25 +276,20 @@ export function HomePage() {
     const heroVideoRef = useRef<HTMLVideoElement>(null);
     const storySectionRef = useRef<HTMLElement>(null);
     const productsSectionRef = useRef<HTMLElement>(null);
+    const shortIframeRef = useRef<HTMLIFrameElement>(null);
+    const shouldAutoplayShortRef = useRef(false);
     const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const shortTransitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
-        null,
-    );
-    const shortTouchStartRef = useRef<{ x: number; y: number } | null>(null);
-    const shortTouchDidSwipeRef = useRef(false);
     const [podcastSwiper, setPodcastSwiper] = useState<SwiperType | null>(null);
+    const [shortViewerSwiper, setShortViewerSwiper] =
+        useState<SwiperType | null>(null);
     const [scrollProgress, setScrollProgress] = useState(0);
     const [isScrollProgressVisible, setIsScrollProgressVisible] = useState(false);
     const [canScrollPodcastPrev, setCanScrollPodcastPrev] = useState(false);
     const [canScrollPodcastNext, setCanScrollPodcastNext] = useState(true);
     const [isStoryVideoOpen, setIsStoryVideoOpen] = useState(false);
     const [openShort, setOpenShort] = useState<PodcastShort | null>(null);
-    const [departingShort, setDepartingShort] = useState<PodcastShort | null>(
-        null,
-    );
     const [isShortPlaying, setIsShortPlaying] = useState(false);
-    const [shortTransitionDirection, setShortTransitionDirection] =
-        useState<ShortTransitionDirection>(null);
+    const [isShortTouchDevice, setIsShortTouchDevice] = useState(false);
     const [isHeroVideoResetting, setIsHeroVideoResetting] = useState(false);
 
     useEffect(() => {
@@ -290,29 +317,63 @@ export function HomePage() {
     }, []);
 
     useEffect(() => {
+        const touchQuery = window.matchMedia("(pointer: coarse)");
+        const updateTouchDevice = () => {
+            setIsShortTouchDevice(touchQuery.matches);
+        };
+
+        updateTouchDevice();
+        touchQuery.addEventListener("change", updateTouchDevice);
+
         return () => {
-            if (shortTransitionTimeoutRef.current) {
-                clearTimeout(shortTransitionTimeoutRef.current);
-            }
+            touchQuery.removeEventListener("change", updateTouchDevice);
         };
     }, []);
 
-    const switchPodcastShort = useCallback((direction: 1 | -1) => {
-        setShortTransitionDirection(direction === 1 ? "up" : "down");
-        setOpenShort((currentShort) => {
-            setDepartingShort(currentShort);
-            return getAdjacentPodcastShort(currentShort, direction);
-        });
-        setIsShortPlaying(true);
+    const sendShortPlayerCommand = useCallback((command: string) => {
+        shortIframeRef.current?.contentWindow?.postMessage(
+            JSON.stringify({
+                event: "command",
+                func: command,
+                args: [],
+            }),
+            "https://www.youtube.com",
+        );
+    }, []);
 
-        if (shortTransitionTimeoutRef.current) {
-            clearTimeout(shortTransitionTimeoutRef.current);
+    const playShortWithSound = useCallback(() => {
+        shouldAutoplayShortRef.current = true;
+        setIsShortPlaying(true);
+        sendShortPlayerCommand("unMute");
+        sendShortPlayerCommand("playVideo");
+        window.requestAnimationFrame(() => {
+            sendShortPlayerCommand("unMute");
+            sendShortPlayerCommand("playVideo");
+        });
+        window.setTimeout(() => {
+            sendShortPlayerCommand("unMute");
+            sendShortPlayerCommand("playVideo");
+        }, 80);
+        window.setTimeout(() => {
+            sendShortPlayerCommand("unMute");
+            sendShortPlayerCommand("playVideo");
+        }, 320);
+    }, [sendShortPlayerCommand]);
+
+    const switchPodcastShort = useCallback((direction: 1 | -1) => {
+        if (shortViewerSwiper) {
+            if (direction === 1) {
+                shortViewerSwiper.slideNext();
+            } else {
+                shortViewerSwiper.slidePrev();
+            }
+
+            return;
         }
 
-        shortTransitionTimeoutRef.current = setTimeout(() => {
-            setDepartingShort(null);
-        }, 380);
-    }, []);
+        setOpenShort((currentShort) => getAdjacentPodcastShort(currentShort, direction));
+        setIsShortPlaying(true);
+    }, [shortViewerSwiper]);
 
     const openPreviousShort = useCallback(() => {
         switchPodcastShort(-1);
@@ -548,12 +609,14 @@ export function HomePage() {
 
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
+                if (openShort) {
+                    setOpenShort(null);
+                    setShortViewerSwiper(null);
+                    setIsShortPlaying(false);
+                    return;
+                }
+
                 setIsStoryVideoOpen(false);
-                setOpenShort(null);
-                setDepartingShort(null);
-                setIsShortPlaying(false);
-                setShortTransitionDirection(null);
-                return;
             }
 
             if (!openShort) {
@@ -633,14 +696,13 @@ export function HomePage() {
 
     const openPodcastShort = (short: PodcastShort) => {
         setOpenShort(short);
-        setDepartingShort(null);
-        setIsShortPlaying(false);
-        setShortTransitionDirection(null);
+        shouldAutoplayShortRef.current = false;
+        setIsShortPlaying(true);
     };
 
     const toggleShortPlayback = () => {
-        if (shortTouchDidSwipeRef.current) {
-            shortTouchDidSwipeRef.current = false;
+        if (isShortTouchDevice) {
+            playShortWithSound();
             return;
         }
 
@@ -649,52 +711,17 @@ export function HomePage() {
 
     const closePodcastShort = () => {
         setOpenShort(null);
-        setDepartingShort(null);
+        setShortViewerSwiper(null);
+        shouldAutoplayShortRef.current = false;
         setIsShortPlaying(false);
-        setShortTransitionDirection(null);
     };
 
-    const handleShortTouchStart = (event: TouchEvent<HTMLElement>) => {
-        const firstTouch = event.touches[0];
-
-        if (!firstTouch) {
-            return;
-        }
-
-        shortTouchStartRef.current = {
-            x: firstTouch.clientX,
-            y: firstTouch.clientY,
-        };
-    };
-
-    const handleShortTouchEnd = (event: TouchEvent<HTMLElement>) => {
-        const start = shortTouchStartRef.current;
-        const lastTouch = event.changedTouches[0];
-
-        shortTouchStartRef.current = null;
-
-        if (!start || !lastTouch) {
-            return;
-        }
-
-        const deltaX = lastTouch.clientX - start.x;
-        const deltaY = lastTouch.clientY - start.y;
-        const absDeltaX = Math.abs(deltaX);
-        const absDeltaY = Math.abs(deltaY);
-
-        if (absDeltaY < 48 || absDeltaY < absDeltaX * 1.25) {
-            return;
-        }
-
-        shortTouchDidSwipeRef.current = true;
-
-        if (deltaY < 0) {
-            openNextShort();
-            return;
-        }
-
-        openPreviousShort();
-    };
+    const openShortIndex = openShort
+        ? Math.max(
+            podcastShorts.findIndex((short) => short.id === openShort.id),
+            0,
+        )
+        : 0;
 
     const handleHeroVideoTimeUpdate = (
         event: SyntheticEvent<HTMLVideoElement>,
@@ -1064,88 +1091,143 @@ export function HomePage() {
                     aria-label={openShort.title}
                     onClick={closePodcastShort}
                 >
-                    <div
-                        className="shortVideoShell"
-                        onClick={(event) => event.stopPropagation()}
+                    <button
+                        className="storyVideoClose shortVideoClose"
+                        type="button"
+                        onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            closePodcastShort();
+                        }}
+                        aria-label="Close short video"
                     >
-                        <div className="shortVideoStage">
-                            {departingShort ? (
-                                <article
-                                    className={`shortVideoDeparting isLeaving-${
-                                        shortTransitionDirection ?? "up"
-                                    }`}
-                                    aria-hidden="true"
-                                >
-                                    <div
-                                        className="shortVideoDepartingImage"
-                                        style={
-                                            departingShort.thumbnailSrc
-                                                ? ({
-                                                    "--short-video-thumbnail": `url(${departingShort.thumbnailSrc})`,
-                                                } as React.CSSProperties)
-                                                : undefined
-                                        }
-                                    />
-                                    <div className="shortVideoMeta">
-                                        <p>{departingShort.subtitle}</p>
-                                        <h3>{departingShort.title}</h3>
-                                    </div>
-                                </article>
-                            ) : null}
-                            <div
-                                key={openShort.id}
-                                className={`storyVideoOverlayInner shortVideoOverlayInner${
-                                    shortTransitionDirection
-                                        ? ` isChanging-${shortTransitionDirection}`
-                                        : ""
-                                }${isShortPlaying ? "" : " isPaused"}`}
-                                onTouchStart={handleShortTouchStart}
-                                onTouchEnd={handleShortTouchEnd}
-                            >
-                                <button
-                                    className="storyVideoClose"
-                                    type="button"
-                                    onClick={closePodcastShort}
-                                    aria-label="Close short video"
-                                >
-                                    <X size={22} strokeWidth={2}/>
-                                </button>
-                                <ReactPlayer
-                                    className="storyVideoFullscreenPlayer"
-                                    src={openShort.videoSrc}
-                                    playing={isShortPlaying}
-                                    controls={false}
-                                    playsInline
-                                    width="100%"
-                                    height="100%"
-                                />
-                                <button
-                                    className="shortVideoSwipeLayer"
-                                    type="button"
-                                    onClick={toggleShortPlayback}
-                                    onTouchStart={handleShortTouchStart}
-                                    onTouchEnd={handleShortTouchEnd}
-                                    aria-label={
-                                        isShortPlaying
-                                            ? "Pause short video"
-                                            : "Play short video"
+                        <X size={22} strokeWidth={2}/>
+                    </button>
+                    <div className="shortVideoShell">
+                        <div
+                            className="shortVideoStage"
+                            onClick={(event) => event.stopPropagation()}
+                        >
+                            <Swiper
+                                className="shortVideoSwiper"
+                                direction="vertical"
+                                slidesPerView={1}
+                                speed={520}
+                                rewind
+                                initialSlide={openShortIndex}
+                                onSwiper={setShortViewerSwiper}
+                                onSlideChange={(swiper) => {
+                                    const nextShort = podcastShorts[swiper.activeIndex];
+
+                                    if (!nextShort) {
+                                        return;
                                     }
-                                >
-                                    <span className="shortVideoPlaybackHint">
-                                        {isShortPlaying ? (
-                                            <Pause size={34} fill="currentColor" strokeWidth={0}/>
-                                        ) : (
-                                            <Play size={34} fill="currentColor" strokeWidth={0}/>
-                                        )}
-                                    </span>
-                                </button>
-                                <div className="shortVideoMeta">
-                                    <p>{openShort.subtitle}</p>
-                                    <h3>{openShort.title}</h3>
-                                </div>
-                            </div>
+
+                                    setOpenShort(nextShort);
+                                    shouldAutoplayShortRef.current = true;
+                                    playShortWithSound();
+                                    window.setTimeout(() => {
+                                        sendShortPlayerCommand("unMute");
+                                        sendShortPlayerCommand("playVideo");
+                                    }, 120);
+                                }}
+                            >
+                                {podcastShorts.map((short) => (
+                                    <SwiperSlide className="shortVideoSlide" key={short.id}>
+                                        <div
+                                            className={`storyVideoOverlayInner shortVideoOverlayInner${
+                                                openShort.id === short.id && !isShortPlaying
+                                                    ? " isPaused"
+                                                    : ""
+                                            }`}
+                                        >
+                                            {openShort.id === short.id && isShortPlaying ? (
+                                                <iframe
+                                                    ref={shortIframeRef}
+                                                    key={short.id}
+                                                    className="storyVideoFullscreenPlayer"
+                                                    src={getYouTubeEmbedSrc(
+                                                        short.videoSrc ?? "",
+                                                    )}
+                                                    title={short.title}
+                                                    allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                                                    onLoad={() => {
+                                                        if (!shouldAutoplayShortRef.current) {
+                                                            return;
+                                                        }
+
+                                                        sendShortPlayerCommand("unMute");
+                                                        sendShortPlayerCommand("playVideo");
+                                                        window.setTimeout(() => {
+                                                            sendShortPlayerCommand("unMute");
+                                                            sendShortPlayerCommand("playVideo");
+                                                        }, 220);
+                                                    }}
+                                                />
+                                            ) : (
+                                                <div
+                                                    className="shortVideoInactivePoster"
+                                                    style={
+                                                        short.thumbnailSrc
+                                                            ? ({
+                                                                "--short-video-thumbnail": `url(${short.thumbnailSrc})`,
+                                                            } as React.CSSProperties)
+                                                            : undefined
+                                                    }
+                                                />
+                                            )}
+                                            <div
+                                                className="shortVideoSwipeLayer"
+                                                role="button"
+                                                tabIndex={0}
+                                                onClick={toggleShortPlayback}
+                                                onKeyDown={(event) => {
+                                                    if (
+                                                        event.key !== "Enter" &&
+                                                        event.key !== " "
+                                                    ) {
+                                                        return;
+                                                    }
+
+                                                    event.preventDefault();
+                                                    toggleShortPlayback();
+                                                }}
+                                                aria-label={
+                                                    openShort.id === short.id && isShortPlaying
+                                                        ? "Pause short video"
+                                                        : "Play short video"
+                                                }
+                                            >
+                                                <span className="shortVideoPlaybackHint">
+                                                    {openShort.id === short.id && isShortPlaying ? (
+                                                        <Pause
+                                                            size={34}
+                                                            fill="currentColor"
+                                                            strokeWidth={0}
+                                                        />
+                                                    ) : (
+                                                        <Play
+                                                            size={34}
+                                                            fill="currentColor"
+                                                            strokeWidth={0}
+                                                        />
+                                                    )}
+                                                </span>
+                                            </div>
+                                            <div className="shortVideoMeta">
+                                                <p>{short.subtitle}</p>
+                                                <h3>{short.title}</h3>
+                                            </div>
+                                        </div>
+                                    </SwiperSlide>
+                                ))}
+                            </Swiper>
                         </div>
-                        <div className="shortVideoControls" aria-label="Shorts navigation">
+                        <div
+                            className="shortVideoControls"
+                            aria-label="Shorts navigation"
+                            onClick={(event) => event.stopPropagation()}
+                        >
                             <button
                                 className="shortVideoControl"
                                 type="button"

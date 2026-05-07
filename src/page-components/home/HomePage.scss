@@ -988,11 +988,41 @@
   width: min(100%, 460px);
   aspect-ratio: 9 / 16;
   flex: 0 1 460px;
+  overflow: hidden;
+  border-radius: 8px;
 }
 
+.shortVideoSwiper,
+.shortVideoSlide,
 .shortVideoStage .shortVideoOverlayInner {
   width: 100%;
   height: 100%;
+}
+
+.shortVideoSwiper {
+  overflow: hidden;
+  background: #000000;
+}
+
+.shortVideoSlide {
+  overflow: hidden;
+}
+
+.shortVideoStage > .storyVideoClose {
+  z-index: 10;
+}
+
+.shortVideoClose {
+  z-index: 20;
+}
+
+.shortVideoInactivePoster {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.62)),
+    var(--short-video-thumbnail, none) center / cover no-repeat,
+    #111111;
 }
 
 .shortVideoDeparting {
@@ -1034,9 +1064,16 @@
   position: absolute;
   inset: 0;
   z-index: 0;
+  border: 0;
 }
 
 .shortVideoOverlayInner .storyVideoFullscreenPlayer iframe {
+  pointer-events: none;
+}
+
+.shortVideoOverlayInner iframe.storyVideoFullscreenPlayer {
+  width: 100% !important;
+  height: 100% !important;
   pointer-events: none;
 }
 
@@ -1044,14 +1081,12 @@
   position: absolute;
   inset: 0;
   z-index: 1;
-  border: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
   color: #ffffff;
   cursor: grab;
-  touch-action: none;
+  touch-action: pan-y;
 }
 
 .shortVideoSwipeLayer:focus-visible {
@@ -1351,6 +1386,7 @@
     height: 100dvh;
     aspect-ratio: auto;
     flex: none;
+    border-radius: 0;
   }
 
   .shortVideoOverlayInner {
