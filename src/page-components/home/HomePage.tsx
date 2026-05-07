@@ -20,6 +20,7 @@ import {
     ChevronUp,
     Pause,
     Play,
+    Volume2,
     X,
 } from "lucide-react";
 import type {Swiper as SwiperType} from "swiper";
@@ -164,7 +165,7 @@ function getYouTubeVideoId(videoSrc: string) {
     return match?.[1] ?? "";
 }
 
-function getYouTubeEmbedSrc(videoSrc: string) {
+function getYouTubeEmbedSrc(videoSrc: string, isMuted = true) {
     const videoId = getYouTubeVideoId(videoSrc);
 
     if (!videoId) {
@@ -183,6 +184,10 @@ function getYouTubeEmbedSrc(videoSrc: string) {
         playlist: videoId,
         rel: "0",
     });
+
+    if (isMuted) {
+        params.set("mute", "1");
+    }
 
     if (typeof window !== "undefined") {
         params.set("origin", window.location.origin);
@@ -289,7 +294,7 @@ export function HomePage() {
     const [isStoryVideoOpen, setIsStoryVideoOpen] = useState(false);
     const [openShort, setOpenShort] = useState<PodcastShort | null>(null);
     const [isShortPlaying, setIsShortPlaying] = useState(false);
-    const [isShortTouchDevice, setIsShortTouchDevice] = useState(false);
+    const [isShortMuted, setIsShortMuted] = useState(true);
     const [isHeroVideoResetting, setIsHeroVideoResetting] = useState(false);
 
     useEffect(() => {
@@ -316,48 +321,64 @@ export function HomePage() {
         };
     }, []);
 
-    useEffect(() => {
-        const touchQuery = window.matchMedia("(pointer: coarse)");
-        const updateTouchDevice = () => {
-            setIsShortTouchDevice(touchQuery.matches);
-        };
-
-        updateTouchDevice();
-        touchQuery.addEventListener("change", updateTouchDevice);
-
-        return () => {
-            touchQuery.removeEventListener("change", updateTouchDevice);
-        };
-    }, []);
-
-    const sendShortPlayerCommand = useCallback((command: string) => {
+    const sendShortPlayerCommand = useCallback((command: string, args: unknown[] = []) => {
         shortIframeRef.current?.contentWindow?.postMessage(
             JSON.stringify({
                 event: "command",
                 func: command,
-                args: [],
+                args,
             }),
-            "https://www.youtube.com",
+            "*",
         );
     }, []);
+
+    const playShortMuted = useCallback(() => {
+        shouldAutoplayShortRef.current = true;
+        setIsShortPlaying(true);
+        setIsShortMuted(true);
+        sendShortPlayerCommand("mute");
+        sendShortPlayerCommand("playVideo");
+        window.requestAnimationFrame(() => {
+            sendShortPlayerCommand("mute");
+            sendShortPlayerCommand("playVideo");
+        });
+        window.setTimeout(() => {
+            sendShortPlayerCommand("mute");
+            sendShortPlayerCommand("playVideo");
+        }, 120);
+        window.setTimeout(() => {
+            sendShortPlayerCommand("mute");
+            sendShortPlayerCommand("playVideo");
+        }, 420);
+    }, [sendShortPlayerCommand]);
 
     const playShortWithSound = useCallback(() => {
         shouldAutoplayShortRef.current = true;
         setIsShortPlaying(true);
+        setIsShortMuted(false);
         sendShortPlayerCommand("unMute");
+        sendShortPlayerCommand("setVolume", [100]);
         sendShortPlayerCommand("playVideo");
         window.requestAnimationFrame(() => {
             sendShortPlayerCommand("unMute");
+            sendShortPlayerCommand("setVolume", [100]);
             sendShortPlayerCommand("playVideo");
         });
         window.setTimeout(() => {
             sendShortPlayerCommand("unMute");
+            sendShortPlayerCommand("setVolume", [100]);
             sendShortPlayerCommand("playVideo");
         }, 80);
         window.setTimeout(() => {
             sendShortPlayerCommand("unMute");
+            sendShortPlayerCommand("setVolume", [100]);
             sendShortPlayerCommand("playVideo");
         }, 320);
+        window.setTimeout(() => {
+            sendShortPlayerCommand("unMute");
+            sendShortPlayerCommand("setVolume", [100]);
+            sendShortPlayerCommand("playVideo");
+        }, 760);
     }, [sendShortPlayerCommand]);
 
     const switchPodcastShort = useCallback((direction: 1 | -1) => {
@@ -372,8 +393,12 @@ export function HomePage() {
         }
 
         setOpenShort((currentShort) => getAdjacentPodcastShort(currentShort, direction));
-        setIsShortPlaying(true);
-    }, [shortViewerSwiper]);
+        if (isShortMuted) {
+            playShortMuted();
+        } else {
+            playShortWithSound();
+        }
+    }, [isShortMuted, playShortMuted, playShortWithSound, shortViewerSwiper]);
 
     const openPreviousShort = useCallback(() => {
         switchPodcastShort(-1);
@@ -696,17 +721,22 @@ export function HomePage() {
 
     const openPodcastShort = (short: PodcastShort) => {
         setOpenShort(short);
-        shouldAutoplayShortRef.current = false;
-        setIsShortPlaying(true);
+        playShortWithSound();
     };
 
     const toggleShortPlayback = () => {
-        if (isShortTouchDevice) {
+        if (isShortMuted) {
             playShortWithSound();
             return;
         }
 
-        setIsShortPlaying((isPlaying) => !isPlaying);
+        if (isShortPlaying) {
+            sendShortPlayerCommand("pauseVideo");
+            setIsShortPlaying(false);
+            return;
+        }
+
+        playShortWithSound();
     };
 
     const closePodcastShort = () => {
@@ -714,6 +744,7 @@ export function HomePage() {
         setShortViewerSwiper(null);
         shouldAutoplayShortRef.current = false;
         setIsShortPlaying(false);
+        setIsShortMuted(true);
     };
 
     const openShortIndex = openShort
@@ -733,7 +764,7 @@ export function HomePage() {
 
             window.setTimeout(() => {
                 video.currentTime = 0;
-                void video.play();
+                void video.play().catch(() => undefined);
                 setIsHeroVideoResetting(false);
             }, 240);
         }
@@ -1124,10 +1155,18 @@ export function HomePage() {
                                     }
 
                                     setOpenShort(nextShort);
-                                    shouldAutoplayShortRef.current = true;
-                                    playShortWithSound();
+                                    if (isShortMuted) {
+                                        playShortMuted();
+                                    } else {
+                                        playShortWithSound();
+                                    }
                                     window.setTimeout(() => {
-                                        sendShortPlayerCommand("unMute");
+                                        if (isShortMuted) {
+                                            sendShortPlayerCommand("mute");
+                                        } else {
+                                            sendShortPlayerCommand("unMute");
+                                            sendShortPlayerCommand("setVolume", [100]);
+                                        }
                                         sendShortPlayerCommand("playVideo");
                                     }, 120);
                                 }}
@@ -1139,15 +1178,20 @@ export function HomePage() {
                                                 openShort.id === short.id && !isShortPlaying
                                                     ? " isPaused"
                                                     : ""
+                                            }${
+                                                openShort.id === short.id && isShortMuted
+                                                    ? " isMuted"
+                                                    : ""
                                             }`}
                                         >
                                             {openShort.id === short.id && isShortPlaying ? (
                                                 <iframe
                                                     ref={shortIframeRef}
-                                                    key={short.id}
+                                                    key={`${short.id}-${isShortMuted ? "muted" : "sound"}`}
                                                     className="storyVideoFullscreenPlayer"
                                                     src={getYouTubeEmbedSrc(
                                                         short.videoSrc ?? "",
+                                                        isShortMuted,
                                                     )}
                                                     title={short.title}
                                                     allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
@@ -1156,10 +1200,20 @@ export function HomePage() {
                                                             return;
                                                         }
 
-                                                        sendShortPlayerCommand("unMute");
+                                                        if (isShortMuted) {
+                                                            sendShortPlayerCommand("mute");
+                                                        } else {
+                                                            sendShortPlayerCommand("unMute");
+                                                            sendShortPlayerCommand("setVolume", [100]);
+                                                        }
                                                         sendShortPlayerCommand("playVideo");
                                                         window.setTimeout(() => {
-                                                            sendShortPlayerCommand("unMute");
+                                                            if (isShortMuted) {
+                                                                sendShortPlayerCommand("mute");
+                                                            } else {
+                                                                sendShortPlayerCommand("unMute");
+                                                                sendShortPlayerCommand("setVolume", [100]);
+                                                            }
                                                             sendShortPlayerCommand("playVideo");
                                                         }, 220);
                                                     }}
@@ -1200,11 +1254,15 @@ export function HomePage() {
                                             >
                                                 <span className="shortVideoPlaybackHint">
                                                     {openShort.id === short.id && isShortPlaying ? (
-                                                        <Pause
-                                                            size={34}
-                                                            fill="currentColor"
-                                                            strokeWidth={0}
-                                                        />
+                                                        isShortMuted ? (
+                                                            <Volume2 size={34} strokeWidth={2}/>
+                                                        ) : (
+                                                            <Pause
+                                                                size={34}
+                                                                fill="currentColor"
+                                                                strokeWidth={0}
+                                                            />
+                                                        )
                                                     ) : (
                                                         <Play
                                                             size={34}
