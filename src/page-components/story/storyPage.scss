@@ -39,9 +39,11 @@
   position: absolute;
   inset: 0;
   display: block;
+  object-fit: cover;
+  object-position: center;
   opacity: 0.88;
   filter: grayscale(0.16) brightness(0.82) saturate(0.96);
-  transform: scale(1.14);
+  transform: scale(1.04);
 }
 
 .storyHeroVideo video {
@@ -75,7 +77,9 @@
   justify-content: center;
   background: rgba(255, 255, 255, 0.12);
   color: #ffffff;
+  text-decoration: none;
   cursor: pointer;
+  touch-action: manipulation;
   box-shadow:
     0 0 0 12px rgba(255, 255, 255, 0.05),
     0 0 44px rgba(109, 157, 132, 0.48),

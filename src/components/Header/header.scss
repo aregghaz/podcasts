@@ -90,11 +90,15 @@ header {
     padding: 0 20px;
     border: 1px solid transparent;
     border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     color: #ffffff;
     font: inherit;
     font-size: 14px;
     font-weight: 700;
     line-height: 1;
+    text-decoration: none;
     cursor: pointer;
     transition:
       transform 180ms ease,

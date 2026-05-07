@@ -1,14 +1,25 @@
 "use client";
 
-import {type SyntheticEvent, useEffect, useRef, useState} from "react";
+import {
+    type MouseEvent,
+    type SyntheticEvent,
+    type TouchEvent,
+    useCallback,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
     ArrowDown,
     ArrowRight,
     Check,
+    ChevronDown,
     ChevronLeft,
     ChevronRight,
+    ChevronUp,
+    Pause,
     Play,
     X,
 } from "lucide-react";
@@ -17,6 +28,7 @@ import {Swiper, SwiperSlide} from "swiper/react";
 import ReactPlayer from "react-player";
 import gsap from "gsap";
 import {ScrollTrigger} from "gsap/ScrollTrigger";
+import "swiper/css";
 import "./HomePage.scss";
 import quizImage1 from "@/Images/quiz1.webp";
 import quizImage2 from "@/Images/quiz2.webp";
@@ -30,7 +42,10 @@ type PodcastShort = {
     title: string;
     subtitle: string;
     videoSrc?: string;
+    thumbnailSrc?: string;
 };
+
+type ShortTransitionDirection = "up" | "down" | null;
 
 const podcastShorts: PodcastShort[] = [
     {
@@ -38,42 +53,49 @@ const podcastShorts: PodcastShort[] = [
         title: "Short video title",
         subtitle: "Mindset reset",
         videoSrc: "https://youtube.com/shorts/jYptVOFUCrk?si=gvJdPposyJa0VaJZ",
+        thumbnailSrc: "https://img.youtube.com/vi/jYptVOFUCrk/hqdefault.jpg",
     },
     {
         id: "business",
         title: "Short video title",
         subtitle: "Business move",
         videoSrc: "https://youtube.com/shorts/q28cql1TNRM?si=TErxZADo5WNF3H5_",
+        thumbnailSrc: "https://img.youtube.com/vi/q28cql1TNRM/hqdefault.jpg",
     },
     {
         id: "story",
         title: "Short video title",
         subtitle: "Real story",
         videoSrc: "https://youtube.com/shorts/cQ0zGhbax68?si=TjiGPBoWwH9rH4mj",
+        thumbnailSrc: "https://img.youtube.com/vi/cQ0zGhbax68/hqdefault.jpg",
     },
     {
         id: "habits",
         title: "Short video title",
         subtitle: "Daily habit",
         videoSrc: "https://youtube.com/shorts/QzXqMWmdIsY?si=JbLdPgr64bzpnhvi",
+        thumbnailSrc: "https://img.youtube.com/vi/QzXqMWmdIsY/hqdefault.jpg",
     },
     {
         id: "leadership",
         title: "Short video title",
         subtitle: "Leadership clip",
         videoSrc: "https://youtube.com/shorts/H4M6ZJF7Qq4?si=2bqbSpKax0SrTVGU",
+        thumbnailSrc: "https://img.youtube.com/vi/H4M6ZJF7Qq4/hqdefault.jpg",
     },
     {
         id: "energy",
         title: "Short video title",
         subtitle: "Energy shift",
         videoSrc: "https://youtube.com/shorts/m_8BAhWLMEw?si=y4ixoEijD44OGtX3",
+        thumbnailSrc: "https://img.youtube.com/vi/m_8BAhWLMEw/hqdefault.jpg",
     },
     {
         id: "focus",
         title: "Short video title",
         subtitle: "Focus point",
         videoSrc: "https://youtube.com/shorts/5WM2Cs-6BHI?si=QrpQSFBVZH2BzvxD",
+        thumbnailSrc: "https://img.youtube.com/vi/5WM2Cs-6BHI/hqdefault.jpg",
     },
 ];
 
@@ -113,6 +135,7 @@ const programCards = [
             "Access to new episode drops and updates",
         ],
         action: "Explore podcast",
+        href: "/podcasts",
     },
     {
         title: "Joe Growth Sessions",
@@ -126,59 +149,63 @@ const programCards = [
             "Designed for founders, creators, and ambitious teams",
         ],
         action: "Start program",
+        href: "/programs",
     },
 ];
 
 const storyVideoSrc = "https://youtu.be/rSD5aqhuuH0?si=vArqCXH-bYmyw5_P";
+const storyPreviewVideoSrc = "/videos/storyVideo.mp4";
 const heroBackgroundVideoSrc = "/videos/heroVideo.mp4";
 const heroBackgroundLoopSeconds = 30;
 const heroBackgroundPlaybackRate = 0.70;
 
 function PodcastShortCard({
                               short,
-                              isActive,
-                              onOpen,
-                              onHoverStart,
-                              onHoverEnd,
+    onOpen,
                           }: {
     short: PodcastShort;
-    isActive: boolean;
     onOpen: () => void;
-    onHoverStart: () => void;
-    onHoverEnd: () => void;
 }) {
+    const [isVideoReady, setIsVideoReady] = useState(false);
+
     return (
-        <article
-            className="podcastShortCard"
-            onMouseEnter={onHoverStart}
-            onMouseLeave={onHoverEnd}
-        >
+        <article className="podcastShortCard">
             <div className="podcastShortMedia">
+                <div
+                    className="podcastShortPlaceholder"
+                    style={
+                        short.thumbnailSrc
+                            ? ({
+                                "--podcast-short-thumbnail": `url(${short.thumbnailSrc})`,
+                            } as React.CSSProperties)
+                            : undefined
+                    }
+                >
+                    <Play size={22} strokeWidth={2}/>
+                </div>
                 {short.videoSrc ? (
                     <ReactPlayer
-                        className="podcastShortVideo"
+                        className={`podcastShortVideo ${
+                            isVideoReady ? "isReady" : ""
+                        }`}
                         src={short.videoSrc}
-                        playing={isActive}
+                        playing
                         muted
                         loop
                         playsInline
                         controls={false}
                         width="100%"
                         height="100%"
+                        onReady={() => setIsVideoReady(true)}
+                        onStart={() => setIsVideoReady(true)}
                     />
-                ) : (
-                    <div className="podcastShortPlaceholder">
-                        <Play size={22} strokeWidth={2}/>
-                    </div>
-                )}
+                ) : null}
             </div>
             {short.videoSrc ? (
                 <button
                     className="podcastShortOpenButton"
                     type="button"
                     onClick={onOpen}
-                    onFocus={onHoverStart}
-                    onBlur={onHoverEnd}
                     aria-label={`Open ${short.title}`}
                 />
             ) : null}
@@ -190,20 +217,110 @@ function PodcastShortCard({
     );
 }
 
+function getAdjacentPodcastShort(
+    currentShort: PodcastShort | null,
+    direction: 1 | -1,
+) {
+    if (!currentShort) {
+        return currentShort;
+    }
+
+    const currentIndex = podcastShorts.findIndex(
+        (short) => short.id === currentShort.id,
+    );
+
+    if (currentIndex === -1) {
+        return currentShort;
+    }
+
+    const nextIndex =
+        (currentIndex + direction + podcastShorts.length) % podcastShorts.length;
+
+    return podcastShorts[nextIndex];
+}
+
 export function HomePage() {
     const homePageRef = useRef<HTMLElement>(null);
     const heroVideoRef = useRef<HTMLVideoElement>(null);
+    const storySectionRef = useRef<HTMLElement>(null);
     const productsSectionRef = useRef<HTMLElement>(null);
     const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const shortTransitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+        null,
+    );
+    const shortTouchStartRef = useRef<{ x: number; y: number } | null>(null);
+    const shortTouchDidSwipeRef = useRef(false);
     const [podcastSwiper, setPodcastSwiper] = useState<SwiperType | null>(null);
     const [scrollProgress, setScrollProgress] = useState(0);
     const [isScrollProgressVisible, setIsScrollProgressVisible] = useState(false);
-    const [activeShortId, setActiveShortId] = useState<string | null>(null);
     const [canScrollPodcastPrev, setCanScrollPodcastPrev] = useState(false);
-    const [canScrollPodcastNext, setCanScrollPodcastNext] = useState(false);
+    const [canScrollPodcastNext, setCanScrollPodcastNext] = useState(true);
     const [isStoryVideoOpen, setIsStoryVideoOpen] = useState(false);
     const [openShort, setOpenShort] = useState<PodcastShort | null>(null);
+    const [departingShort, setDepartingShort] = useState<PodcastShort | null>(
+        null,
+    );
+    const [isShortPlaying, setIsShortPlaying] = useState(false);
+    const [shortTransitionDirection, setShortTransitionDirection] =
+        useState<ShortTransitionDirection>(null);
     const [isHeroVideoResetting, setIsHeroVideoResetting] = useState(false);
+
+    useEffect(() => {
+        const video = heroVideoRef.current;
+
+        if (!video) {
+            return;
+        }
+
+        video.defaultMuted = true;
+        video.muted = true;
+        video.playbackRate = heroBackgroundPlaybackRate;
+
+        const playVideo = () => {
+            video.playbackRate = heroBackgroundPlaybackRate;
+            void video.play().catch(() => undefined);
+        };
+
+        playVideo();
+        window.addEventListener("pageshow", playVideo);
+
+        return () => {
+            window.removeEventListener("pageshow", playVideo);
+        };
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            if (shortTransitionTimeoutRef.current) {
+                clearTimeout(shortTransitionTimeoutRef.current);
+            }
+        };
+    }, []);
+
+    const switchPodcastShort = useCallback((direction: 1 | -1) => {
+        setShortTransitionDirection(direction === 1 ? "up" : "down");
+        setOpenShort((currentShort) => {
+            setDepartingShort(currentShort);
+            return getAdjacentPodcastShort(currentShort, direction);
+        });
+        setIsShortPlaying(true);
+
+        if (shortTransitionTimeoutRef.current) {
+            clearTimeout(shortTransitionTimeoutRef.current);
+        }
+
+        shortTransitionTimeoutRef.current = setTimeout(() => {
+            setDepartingShort(null);
+        }, 380);
+    }, []);
+
+    const openPreviousShort = useCallback(() => {
+        switchPodcastShort(-1);
+    }, [switchPodcastShort]);
+
+    const openNextShort = useCallback(() => {
+        switchPodcastShort(1);
+    }, [switchPodcastShort]);
 
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
@@ -215,32 +332,40 @@ export function HomePage() {
         const setupAnimations = () => {
             context = gsap.context(() => {
                 const heroTimeline = gsap.timeline({defaults: {ease: "power3.out"}});
+                const headerElement = document.querySelector("header");
+                const podcastPlaceholderIcons = gsap.utils.toArray(
+                    ".podcastShortPlaceholder svg",
+                );
 
                 heroTimeline
                     .from(".videoPlayerWrapper", {
                         autoAlpha: 0,
                         scale: 1.04,
                         duration: 1.25,
-                    })
-                    .from(
-                        "header",
+                    });
+
+                if (headerElement) {
+                    heroTimeline.from(
+                        headerElement,
                         {
                             autoAlpha: 0,
                             y: -18,
                             duration: 0.7,
                         },
                         "-=0.78",
-                    )
-                    .from(
-                        [".heroEyebrow", ".heroInfoGlob h1", ".heroText"],
-                        {
-                            autoAlpha: 0,
-                            y: 34,
-                            duration: 0.78,
-                            stagger: 0.12,
-                        },
-                        "-=0.35",
                     );
+                }
+
+                heroTimeline.from(
+                    [".heroEyebrow", ".heroInfoGlob h1", ".heroText"],
+                    {
+                        autoAlpha: 0,
+                        y: 34,
+                        duration: 0.78,
+                        stagger: 0.12,
+                    },
+                    "-=0.35",
+                );
 
                 gsap.from(".podcastPreviewHeader > *", {
                     autoAlpha: 0,
@@ -251,19 +376,6 @@ export function HomePage() {
                     scrollTrigger: {
                         trigger: ".heroPoductsSection",
                         start: "top 72%",
-                    },
-                });
-
-                gsap.from(".podcastShortCard", {
-                    autoAlpha: 0,
-                    y: 44,
-                    scale: 0.96,
-                    duration: 0.72,
-                    ease: "power3.out",
-                    stagger: 0.08,
-                    scrollTrigger: {
-                        trigger: ".podcastSliderShell",
-                        start: "top 76%",
                     },
                 });
 
@@ -368,19 +480,21 @@ export function HomePage() {
                     yoyo: true,
                 });
 
-                gsap.to(".podcastShortPlaceholder svg", {
-                    y: -6,
-                    scale: 1.06,
-                    duration: 1.45,
-                    ease: "sine.inOut",
-                    repeat: -1,
-                    yoyo: true,
-                    stagger: {
-                        each: 0.18,
+                if (podcastPlaceholderIcons.length > 0) {
+                    gsap.to(podcastPlaceholderIcons, {
+                        y: -6,
+                        scale: 1.06,
+                        duration: 1.45,
+                        ease: "sine.inOut",
                         repeat: -1,
                         yoyo: true,
-                    },
-                });
+                        stagger: {
+                            each: 0.18,
+                            repeat: -1,
+                            yoyo: true,
+                        },
+                    });
+                }
 
                 gsap.to(".storyPreviewPortraitImage", {
                     y: -10,
@@ -436,6 +550,24 @@ export function HomePage() {
             if (event.key === "Escape") {
                 setIsStoryVideoOpen(false);
                 setOpenShort(null);
+                setDepartingShort(null);
+                setIsShortPlaying(false);
+                setShortTransitionDirection(null);
+                return;
+            }
+
+            if (!openShort) {
+                return;
+            }
+
+            if (event.key === "ArrowDown" || event.key === "PageDown") {
+                event.preventDefault();
+                openNextShort();
+            }
+
+            if (event.key === "ArrowUp" || event.key === "PageUp") {
+                event.preventDefault();
+                openPreviousShort();
             }
         };
 
@@ -445,7 +577,7 @@ export function HomePage() {
             document.body.style.overflow = previousBodyOverflow;
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [isStoryVideoOpen, openShort]);
+    }, [isStoryVideoOpen, openNextShort, openPreviousShort, openShort]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -478,11 +610,90 @@ export function HomePage() {
         };
     }, []);
 
-    const scrollToNextSection = () => {
-        productsSectionRef.current?.scrollIntoView({
+    const scrollToNextSection = (event: MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault();
+
+        const nextSection = storySectionRef.current;
+
+        if (!nextSection) {
+            return;
+        }
+
+        window.scrollTo({
+            top: nextSection.getBoundingClientRect().top + window.scrollY,
             behavior: "smooth",
-            block: "start",
         });
+    };
+
+    const openStoryVideo = (event: MouseEvent<HTMLElement>) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsStoryVideoOpen(true);
+    };
+
+    const openPodcastShort = (short: PodcastShort) => {
+        setOpenShort(short);
+        setDepartingShort(null);
+        setIsShortPlaying(false);
+        setShortTransitionDirection(null);
+    };
+
+    const toggleShortPlayback = () => {
+        if (shortTouchDidSwipeRef.current) {
+            shortTouchDidSwipeRef.current = false;
+            return;
+        }
+
+        setIsShortPlaying((isPlaying) => !isPlaying);
+    };
+
+    const closePodcastShort = () => {
+        setOpenShort(null);
+        setDepartingShort(null);
+        setIsShortPlaying(false);
+        setShortTransitionDirection(null);
+    };
+
+    const handleShortTouchStart = (event: TouchEvent<HTMLElement>) => {
+        const firstTouch = event.touches[0];
+
+        if (!firstTouch) {
+            return;
+        }
+
+        shortTouchStartRef.current = {
+            x: firstTouch.clientX,
+            y: firstTouch.clientY,
+        };
+    };
+
+    const handleShortTouchEnd = (event: TouchEvent<HTMLElement>) => {
+        const start = shortTouchStartRef.current;
+        const lastTouch = event.changedTouches[0];
+
+        shortTouchStartRef.current = null;
+
+        if (!start || !lastTouch) {
+            return;
+        }
+
+        const deltaX = lastTouch.clientX - start.x;
+        const deltaY = lastTouch.clientY - start.y;
+        const absDeltaX = Math.abs(deltaX);
+        const absDeltaY = Math.abs(deltaY);
+
+        if (absDeltaY < 48 || absDeltaY < absDeltaX * 1.25) {
+            return;
+        }
+
+        shortTouchDidSwipeRef.current = true;
+
+        if (deltaY < 0) {
+            openNextShort();
+            return;
+        }
+
+        openPreviousShort();
     };
 
     const handleHeroVideoTimeUpdate = (
@@ -508,41 +719,58 @@ export function HomePage() {
 
     const handlePodcastSwiper = (swiper: SwiperType) => {
         setPodcastSwiper(swiper);
-        updatePodcastSliderButtons(swiper);
+        window.requestAnimationFrame(() => {
+            swiper.update();
+            updatePodcastSliderButtons(swiper);
+        });
     };
 
     const scrollPodcastPrev = () => {
-        podcastSwiper?.slidePrev();
+        if (!podcastSwiper) {
+            return;
+        }
+
+        podcastSwiper.update();
+        podcastSwiper.slidePrev();
     };
 
     const scrollPodcastNext = () => {
-        podcastSwiper?.slideNext();
+        if (!podcastSwiper) {
+            return;
+        }
+
+        podcastSwiper.update();
+        podcastSwiper.slideNext();
     };
 
     return (
         <main className="homePage" ref={homePageRef}>
             <section className="heroSection">
                 <div className="videoPlayerWrapper" aria-hidden="true">
-                    <ReactPlayer
+                    <video
                         ref={heroVideoRef}
                         className={`heroVideoPlayer ${
                             isHeroVideoResetting ? "isResetting" : ""
                         }`}
-                        src={heroBackgroundVideoSrc}
-                        playing
+                        autoPlay
                         muted
                         loop
                         playsInline
                         controls={false}
-                        playbackRate={heroBackgroundPlaybackRate}
                         onTimeUpdate={handleHeroVideoTimeUpdate}
-                        width="100%"
-                        height="100%"
+                        onCanPlay={() => {
+                            if (heroVideoRef.current) {
+                                heroVideoRef.current.playbackRate =
+                                    heroBackgroundPlaybackRate;
+                            }
+                        }}
                         preload="auto"
                         disablePictureInPicture
                         disableRemotePlayback
                         tabIndex={-1}
-                    />
+                    >
+                        <source src={heroBackgroundVideoSrc} type="video/mp4"/>
+                    </video>
                 </div>
                 <div className="heroContent">
                     <div className="heroInfoGlob">
@@ -553,7 +781,7 @@ export function HomePage() {
                             change direction.
                         </p>
                     </div>
-                    <button
+                    <a
                         className={`heroScrollButton ${
                             isScrollProgressVisible ? "progressVisible" : ""
                         }`}
@@ -562,7 +790,7 @@ export function HomePage() {
                                 "--scroll-progress": `${scrollProgress * 360}deg`,
                             } as React.CSSProperties
                         }
-                        type="button"
+                        href="#home-story"
                         onClick={scrollToNextSection}
                         aria-label="Scroll down"
                     >
@@ -573,11 +801,11 @@ export function HomePage() {
                   strokeWidth={2}
               />
             </span>
-                    </button>
+                    </a>
                 </div>
             </section>
 
-            <section className="heroStorySection">
+            <section className="heroStorySection" id="home-story" ref={storySectionRef}>
                 <div className="storyPreviewContent">
                     <div className="storyPreviewMedia">
                         <article className="storyPreviewPortrait">
@@ -603,27 +831,29 @@ export function HomePage() {
                             pivots, and moments that make each episode feel useful beyond the
                             microphone.
                         </p>
-                        <article className="storyPreviewVideo">
-                            <ReactPlayer
+                        <article
+                            className="storyPreviewVideo"
+                            onClick={openStoryVideo}
+                        >
+                            <video
                                 className="storyPreviewPlayer"
-                                src={storyVideoSrc}
-                                playing
+                                autoPlay
                                 muted
                                 loop
                                 playsInline
                                 controls={false}
-                                width="100%"
-                                height="100%"
                                 preload="metadata"
                                 disablePictureInPicture
                                 disableRemotePlayback
                                 tabIndex={-1}
-                            />
+                            >
+                                <source src={storyPreviewVideoSrc} type="video/mp4"/>
+                            </video>
                             <span className="storyPreviewVideoShade"/>
                             <button
                                 className="storyPreviewPlay"
                                 type="button"
-                                onClick={() => setIsStoryVideoOpen(true)}
+                                onClick={openStoryVideo}
                                 aria-label="Watch story video"
                             >
                                 <Play size={17} fill="currentColor" strokeWidth={0}/>
@@ -690,7 +920,6 @@ export function HomePage() {
                             slidesPerGroup={1}
                             spaceBetween={18}
                             speed={520}
-                            watchOverflow
                             breakpoints={{
                                 0: {
                                     slidesPerView: 1.18,
@@ -710,6 +939,7 @@ export function HomePage() {
                                 },
                             }}
                             onSwiper={handlePodcastSwiper}
+                            onAfterInit={updatePodcastSliderButtons}
                             onSlideChange={updatePodcastSliderButtons}
                             onResize={updatePodcastSliderButtons}
                             aria-label="Podcast shorts"
@@ -718,29 +948,30 @@ export function HomePage() {
                                 <SwiperSlide className="podcastSlide" key={short.id}>
                                     <PodcastShortCard
                                         short={short}
-                                        isActive={activeShortId === short.id}
-                                        onOpen={() => setOpenShort(short)}
-                                        onHoverStart={() => setActiveShortId(short.id)}
-                                        onHoverEnd={() => setActiveShortId(null)}
+                                        onOpen={() => openPodcastShort(short)}
                                     />
                                 </SwiperSlide>
                             ))}
                         </Swiper>
                         <div className="podcastSliderControls" aria-label="Podcast slider">
                             <button
-                                className="podcastSliderControl"
+                                className={`podcastSliderControl${
+                                    canScrollPodcastPrev ? "" : " isDisabled"
+                                }`}
                                 type="button"
                                 onClick={scrollPodcastPrev}
-                                disabled={!canScrollPodcastPrev}
+                                aria-disabled={!canScrollPodcastPrev}
                                 aria-label="Previous podcast short"
                             >
                                 <ChevronLeft size={20} strokeWidth={2}/>
                             </button>
                             <button
-                                className="podcastSliderControl"
+                                className={`podcastSliderControl${
+                                    canScrollPodcastNext ? "" : " isDisabled"
+                                }`}
                                 type="button"
                                 onClick={scrollPodcastNext}
-                                disabled={!canScrollPodcastNext}
+                                aria-disabled={!canScrollPodcastNext}
                                 aria-label="Next podcast short"
                             >
                                 <ChevronRight size={20} strokeWidth={2}/>
@@ -784,9 +1015,9 @@ export function HomePage() {
                                         </li>
                                     ))}
                                 </ul>
-                                <button className="programCardButton" type="button">
+                                <Link className="programCardButton" href={card.href}>
                                     {card.action}
-                                </button>
+                                </Link>
                             </article>
                         ))}
                     </div>
@@ -827,33 +1058,111 @@ export function HomePage() {
             ) : null}
             {openShort?.videoSrc ? (
                 <div
-                    className="storyVideoOverlay"
+                    className="storyVideoOverlay shortVideoOverlay"
                     role="dialog"
                     aria-modal="true"
                     aria-label={openShort.title}
-                    onClick={() => setOpenShort(null)}
+                    onClick={closePodcastShort}
                 >
                     <div
-                        className="storyVideoOverlayInner shortVideoOverlayInner"
+                        className="shortVideoShell"
                         onClick={(event) => event.stopPropagation()}
                     >
-                        <button
-                            className="storyVideoClose"
-                            type="button"
-                            onClick={() => setOpenShort(null)}
-                            aria-label="Close short video"
-                        >
-                            <X size={22} strokeWidth={2}/>
-                        </button>
-                        <ReactPlayer
-                            className="storyVideoFullscreenPlayer"
-                            src={openShort.videoSrc}
-                            playing
-                            controls
-                            playsInline
-                            width="100%"
-                            height="100%"
-                        />
+                        <div className="shortVideoStage">
+                            {departingShort ? (
+                                <article
+                                    className={`shortVideoDeparting isLeaving-${
+                                        shortTransitionDirection ?? "up"
+                                    }`}
+                                    aria-hidden="true"
+                                >
+                                    <div
+                                        className="shortVideoDepartingImage"
+                                        style={
+                                            departingShort.thumbnailSrc
+                                                ? ({
+                                                    "--short-video-thumbnail": `url(${departingShort.thumbnailSrc})`,
+                                                } as React.CSSProperties)
+                                                : undefined
+                                        }
+                                    />
+                                    <div className="shortVideoMeta">
+                                        <p>{departingShort.subtitle}</p>
+                                        <h3>{departingShort.title}</h3>
+                                    </div>
+                                </article>
+                            ) : null}
+                            <div
+                                key={openShort.id}
+                                className={`storyVideoOverlayInner shortVideoOverlayInner${
+                                    shortTransitionDirection
+                                        ? ` isChanging-${shortTransitionDirection}`
+                                        : ""
+                                }${isShortPlaying ? "" : " isPaused"}`}
+                                onTouchStart={handleShortTouchStart}
+                                onTouchEnd={handleShortTouchEnd}
+                            >
+                                <button
+                                    className="storyVideoClose"
+                                    type="button"
+                                    onClick={closePodcastShort}
+                                    aria-label="Close short video"
+                                >
+                                    <X size={22} strokeWidth={2}/>
+                                </button>
+                                <ReactPlayer
+                                    className="storyVideoFullscreenPlayer"
+                                    src={openShort.videoSrc}
+                                    playing={isShortPlaying}
+                                    controls={false}
+                                    playsInline
+                                    width="100%"
+                                    height="100%"
+                                />
+                                <button
+                                    className="shortVideoSwipeLayer"
+                                    type="button"
+                                    onClick={toggleShortPlayback}
+                                    onTouchStart={handleShortTouchStart}
+                                    onTouchEnd={handleShortTouchEnd}
+                                    aria-label={
+                                        isShortPlaying
+                                            ? "Pause short video"
+                                            : "Play short video"
+                                    }
+                                >
+                                    <span className="shortVideoPlaybackHint">
+                                        {isShortPlaying ? (
+                                            <Pause size={34} fill="currentColor" strokeWidth={0}/>
+                                        ) : (
+                                            <Play size={34} fill="currentColor" strokeWidth={0}/>
+                                        )}
+                                    </span>
+                                </button>
+                                <div className="shortVideoMeta">
+                                    <p>{openShort.subtitle}</p>
+                                    <h3>{openShort.title}</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="shortVideoControls" aria-label="Shorts navigation">
+                            <button
+                                className="shortVideoControl"
+                                type="button"
+                                onClick={openPreviousShort}
+                                aria-label="Previous short"
+                            >
+                                <ChevronUp size={24} strokeWidth={2}/>
+                            </button>
+                            <button
+                                className="shortVideoControl"
+                                type="button"
+                                onClick={openNextShort}
+                                aria-label="Next short"
+                            >
+                                <ChevronDown size={24} strokeWidth={2}/>
+                            </button>
+                        </div>
                     </div>
                 </div>
             ) : null}

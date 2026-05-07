@@ -64,12 +64,12 @@ export function Header() {
         />
       </div>
       <div className="buttonWrapper">
-        <button className="headerButton headerButtonGhost" type="button">
+        <Link className="headerButton headerButtonGhost" href="/podcasts">
           Listen now
-        </button>
-        <button className="headerButton headerButtonPrimary" type="button">
+        </Link>
+        <Link className="headerButton headerButtonPrimary" href="/programs">
           Subscribe
-        </button>
+        </Link>
       </div>
     </header>
   );

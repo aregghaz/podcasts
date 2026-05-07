@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { type MouseEvent, useEffect, useRef, useState } from "react";
 import { Play, X } from "lucide-react";
 import ReactPlayer from "react-player";
 import "./storyPage.scss";
@@ -8,7 +8,32 @@ import "./storyPage.scss";
 const storyHeroVideoSrc = "/videos/storyVideo.mp4";
 
 export function StoryPage() {
+  const storyHeroVideoRef = useRef<HTMLVideoElement>(null);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+
+  useEffect(() => {
+    const video = storyHeroVideoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    video.defaultMuted = true;
+    video.muted = true;
+    video.playbackRate = 0.72;
+
+    const playVideo = () => {
+      video.playbackRate = 0.72;
+      void video.play().catch(() => undefined);
+    };
+
+    playVideo();
+    window.addEventListener("pageshow", playVideo);
+
+    return () => {
+      window.removeEventListener("pageshow", playVideo);
+    };
+  }, []);
 
   useEffect(() => {
     if (!isVideoOpen) {
@@ -32,36 +57,47 @@ export function StoryPage() {
     };
   }, [isVideoOpen]);
 
+  const openVideo = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    setIsVideoOpen(true);
+  };
+
   return (
     <main className="screenPage">
       <section className="storyHeroWrapper">
         <div className="storyHeroVideoLayer" aria-hidden="true">
-          <ReactPlayer
+          <video
+            ref={storyHeroVideoRef}
             className="storyHeroVideo"
-            src={storyHeroVideoSrc}
-            playing
+            autoPlay
             muted
             loop
             playsInline
             controls={false}
-            playbackRate={0.72}
-            width="100%"
-            height="100%"
+            onCanPlay={() => {
+              if (storyHeroVideoRef.current) {
+                storyHeroVideoRef.current.playbackRate = 0.72;
+              }
+            }}
             preload="auto"
             disablePictureInPicture
             disableRemotePlayback
             tabIndex={-1}
-          />
+          >
+            <source src={storyHeroVideoSrc} type="video/mp4" />
+          </video>
         </div>
         <div className="storyHeroContent">
-          <button
+          <a
             className="storyHeroPlay"
-            type="button"
-            onClick={() => setIsVideoOpen(true)}
+            href={storyHeroVideoSrc}
+            target="_blank"
+            rel="noreferrer"
+            onClick={openVideo}
             aria-label="Play Joe Mkhitaryan story video"
           >
             <Play size={34} fill="currentColor" strokeWidth={0} />
-          </button>
+          </a>
           <p className="storyHeroEyebrow">The story of Joe Mkhitaryan</p>
           <h1>Gagik “Joe” Mkhitaryan</h1>
           <p className="storyHeroText">
