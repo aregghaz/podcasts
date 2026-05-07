@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { createPortal } from "react-dom";
 import "./header.scss";
 
 const menuItems = [
@@ -18,33 +17,70 @@ const menuItems = [
 export function Header() {
   const pathname = usePathname();
   const [isFixed, setIsFixed] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const isActiveLink = (href: string) =>
+    href === "/" ? pathname === href : pathname.startsWith(href);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsFixed(window.scrollY > 300);
+      setIsFixed(window.scrollY > 80);
     };
 
-    const frameId = window.requestAnimationFrame(() => {
-      setIsMounted(true);
-      handleScroll();
-    });
-
+    handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      window.cancelAnimationFrame(frameId);
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  const headerMarkup = (className = "") => (
-    <header className={className}>
+  useEffect(() => {
+    const frameId = window.requestAnimationFrame(() => {
+      setIsMenuOpen(false);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+    };
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.classList.toggle("menuIsOpen", isMenuOpen);
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+      }
+    };
+
+    const handleResize = () => {
+      if (window.innerWidth > 1120) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      document.body.classList.remove("menuIsOpen");
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isMenuOpen]);
+
+  return (
+    <header
+      className={`siteHeader ${isFixed ? "fixedHeader" : ""} ${
+        isMenuOpen ? "menuOpen" : ""
+      }`}
+    >
       <div className="menuWrapper">
         <nav className="menuNav" aria-label="Primary navigation">
           {menuItems.map((item) => (
             <Link
-              className={`menuLink ${pathname === item.href ? "active" : ""}`}
+              className={`menuLink ${isActiveLink(item.href) ? "active" : ""}`}
               href={item.href}
               key={item.href}
             >
@@ -71,15 +107,44 @@ export function Header() {
           Subscribe
         </Link>
       </div>
+      <button
+        className="burgerMenuWrapper"
+        type="button"
+        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        aria-controls="mobile-navigation"
+        aria-expanded={isMenuOpen}
+        onClick={() => setIsMenuOpen((prev) => !prev)}
+      >
+        <span />
+        <span />
+        <span />
+      </button>
+      <div
+        className="mobileMenuBackdrop"
+        aria-hidden="true"
+        onClick={() => setIsMenuOpen(false)}
+      />
+      <div className="burgerMenuOpen" id="mobile-navigation">
+        <nav className="mobileMenuNav" aria-label="Mobile navigation">
+          {menuItems.map((item) => (
+            <Link
+              className={`menuLink ${isActiveLink(item.href) ? "active" : ""}`}
+              href={item.href}
+              key={item.href}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="mobileButtonWrapper">
+          <Link className="headerButton headerButtonGhost" href="/podcasts">
+            Listen now
+          </Link>
+          <Link className="headerButton headerButtonPrimary" href="/programs">
+            Subscribe
+          </Link>
+        </div>
+      </div>
     </header>
-  );
-
-  return (
-    <>
-      {headerMarkup()}
-      {isMounted && isFixed
-        ? createPortal(headerMarkup("fixedHeader"), document.body)
-        : null}
-    </>
   );
 }
