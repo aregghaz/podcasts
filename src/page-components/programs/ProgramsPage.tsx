@@ -317,7 +317,7 @@ export function ProgramsPage() {
         <div className="programsInsightsShell">
           <div className="programsInsightsHeader">
             <div>
-              <p className="programsInsightsEyebrow">Joe's playbook</p>
+              <p className="programsInsightsEyebrow">Joe&apos;s playbook</p>
               <h2>Explore field notes</h2>
             </div>
             <a className="programsInsightsLink" href="/podcasts">

@@ -153,6 +153,7 @@
     line-height: 1;
     text-decoration: none;
     cursor: pointer;
+    white-space: nowrap;
     transition:
       transform 180ms ease,
       border-color 180ms ease,
@@ -341,7 +342,7 @@
     padding-top: 12px;
     border-top: 1px solid rgba(255, 255, 255, 0.12);
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
   }
 
@@ -349,6 +350,205 @@
     width: 100%;
     min-width: 0;
     padding: 0 12px;
+  }
+
+  .contactSidebarBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(0, 0, 0, 0.48);
+    backdrop-filter: blur(4px);
+  }
+
+  .contactSidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 10001;
+    width: min(100vw, 430px);
+    height: 100dvh;
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    display: flex;
+    flex-direction: column;
+    background:
+      linear-gradient(180deg, rgba(24, 29, 26, 0.98), rgba(7, 9, 8, 0.98)),
+      #080a09;
+    box-shadow: -24px 0 80px rgba(0, 0, 0, 0.46);
+    color: #ffffff;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(100%);
+    transition:
+      opacity 240ms ease,
+      transform 240ms ease;
+  }
+
+  .contactSidebar.open {
+    pointer-events: auto;
+    opacity: 1;
+    transform: translateX(0);
+    animation: contactSidebarIn 240ms ease both;
+  }
+
+  .contactSidebarHeader {
+    min-height: 88px;
+    padding: 24px 24px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+  }
+
+  .contactSidebarHeader h2 {
+    margin: 0;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 800;
+    line-height: 1.05;
+  }
+
+  .contactSidebarClose {
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    cursor: pointer;
+    transition:
+      background 180ms ease,
+      border-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .contactSidebarClose:hover,
+  .contactSidebarClose:focus-visible {
+    border-color: rgba(255, 255, 255, 0.42);
+    background: rgba(255, 255, 255, 0.14);
+    transform: translateY(-1px);
+  }
+
+  .contactSidebarClose:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+  }
+
+  .contactSidebarBody {
+    flex: 1;
+    padding: 24px;
+    overflow-y: auto;
+  }
+
+  .contactSidebarIntro {
+    padding: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .contactSidebarEyebrow {
+    margin: 0 0 12px;
+    color: rgba(255, 255, 255, 0.64);
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .contactSidebarIntro h3 {
+    margin: 0;
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 800;
+    line-height: 1.02;
+  }
+
+  .contactSidebarIntro p:not(.contactSidebarEyebrow) {
+    margin: 16px 0 0;
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  .contactSidebarTopics {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .contactSidebarTopics span {
+    min-height: 34px;
+    padding: 0 12px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .contactSocialBlock {
+    margin-top: 28px;
+  }
+
+  .contactSocialBlock p {
+    margin: 0 0 14px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .contactSocialLinks {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .contactSocialLink {
+    min-height: 52px;
+    padding: 0 14px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.06);
+    transition:
+      background 180ms ease,
+      border-color 180ms ease,
+      transform 180ms ease;
+  }
+
+  .contactSocialLink:hover,
+  .contactSocialLink:focus-visible {
+    border-color: rgba(255, 255, 255, 0.34);
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
+  }
+
+  .contactSocialLink:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+  }
+
+  .contactSocialLink svg {
+    width: 20px;
+    height: 20px;
+    flex: 0 0 auto;
+    fill: currentColor;
   }
 }
 
@@ -384,6 +584,18 @@ body.menuIsOpen {
   to {
     opacity: 1;
     translate: 0 0;
+  }
+}
+
+@keyframes contactSidebarIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 

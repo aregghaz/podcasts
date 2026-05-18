@@ -125,11 +125,11 @@ const programCards = [
         title: "Joe Podcast Circle",
         meta: "Weekly",
         description:
-            "For listeners who want sharper ideas, practical stories, and steady momentum from every episode.",
+            "For listeners who want sharper thinking, real conversations, and principles they can carry into business and life.",
         features: [
-            "Curated podcast lessons from Joe's conversations",
-            "Weekly mindset and business takeaways",
-            "Short clips built for quick action",
+            "Entrepreneurial insights and leadership lessons",
+            "Perspective on risk, discipline, and resilience",
+            "Short clips built around clear action",
             "Access to new episode drops and updates",
         ],
         action: "Explore podcast",
@@ -139,10 +139,10 @@ const programCards = [
         title: "Joe Growth Sessions",
         meta: "Program",
         description:
-            "For builders who want a deeper path through decisions, direction, and real execution.",
+            "For builders who want a deeper path through decisions, direction, character, and real execution.",
         features: [
             "Focused sessions around business and personal growth",
-            "Frameworks from founder stories and hard pivots",
+            "Frameworks for calculated risk and self-control",
             "Practical prompts for your next move",
             "Designed for founders, creators, and ambitious teams",
         ],
@@ -832,11 +832,12 @@ export function HomePage() {
                 </div>
                 <div className="heroContent">
                     <div className="heroInfoGlob">
-                        <p className="heroEyebrow">Podcast for bold builders</p>
-                        <h1>Listen. Learn. Move.</h1>
+                        <p className="heroEyebrow">Joe Mkhitaryan</p>
+                        <h1>Think clearly. Risk intelligently.</h1>
                         <p className="heroText">
-                            Conversations about mindset, business, and the moments that
-                            change direction.
+                            A platform for entrepreneurs, leaders, and builders who want
+                            sharper perspective, stronger character, and real conversations
+                            about business, purpose, discipline, and legacy.
                         </p>
                     </div>
                     <a
@@ -878,16 +879,17 @@ export function HomePage() {
                     </div>
                     <div className="storyPreviewCopy">
                         <p className="storyPreviewEyebrow">The story</p>
-                        <h2>Real conversations behind every bold move.</h2>
+                        <h2>Built through immigration, business, pressure, and perspective.</h2>
                         <p className="storyPreviewLead">
-                            Joe brings founders, builders, and sharp thinkers into honest
-                            conversations about pressure, purpose, and the decisions that
-                            change direction.
+                            Joe Mkhitaryan&apos;s story began through adaptation, sacrifice,
+                            and the pursuit of opportunity before it ever became a podcast
+                            or media platform.
                         </p>
                         <p className="storyPreviewText">
-                            A quiet section for the human side of the podcast: the lessons,
-                            pivots, and moments that make each episode feel useful beyond the
-                            microphone.
+                            From healthcare transportation and business operations to podcast
+                            conversations and educational content, the goal is to share ideas
+                            that help people become stronger thinkers, better leaders, and
+                            more disciplined builders.
                         </p>
                         <article
                             className="storyPreviewVideo"
@@ -927,7 +929,7 @@ export function HomePage() {
                         <p className="quizPreviewEyebrow">Quiz</p>
                         <h2>Find the signal in how you move.</h2>
                         <p>
-                            Four quick prompts built to reveal your pace, perspective,
+                            Four quick prompts built to reveal your pace, risk lens,
                             momentum, and next direction.
                         </p>
                     </div>
@@ -968,7 +970,8 @@ export function HomePage() {
                         </div>
                         <p className="podcastPreviewText">
                             Quick conversations, sharp ideas, and practical moments from the
-                            show. Hover any short to preview the clip when videos are ready.
+                            show around ambition, business, relationships, leadership,
+                            pressure, discipline, and legacy.
                         </p>
                     </div>
                     <div className="podcastSliderShell">
@@ -1051,10 +1054,11 @@ export function HomePage() {
                 <div className="programPreviewContent">
                     <div className="programPreviewHeader">
                         <p className="programPreviewEyebrow">Programs</p>
-                        <h2>Take the next step with Joe.</h2>
+                        <h2>Build more than income.</h2>
                         <p>
-                            Choose a path built around real conversations, useful lessons,
-                            and the kind of momentum you can carry into the week.
+                            Choose a path built around character, companies, relationships,
+                            wisdom, and the kind of discipline that turns ambition into
+                            direction.
                         </p>
                     </div>
                     <div className="programCardsGrid">
