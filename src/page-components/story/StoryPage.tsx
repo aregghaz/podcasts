@@ -12,62 +12,62 @@ const storyHeroVideoSrc = "/videos/storyVideo.mp4";
 
 const storyPodcastPrinciples = [
   {
-    title: "Founders and builders",
-    text: "Conversations with people who know what it means to carry risk, make decisions, and keep moving when the outcome is still uncertain.",
+    title: "Substance over image",
+    text: "The conversations are built for people who want real lessons, honest perspective, and ideas that last longer than a moment of motivation.",
   },
   {
-    title: "Practical lessons",
-    text: "The podcast looks for usable insight: how leaders think, how teams grow, how pressure is handled, and what can be learned from the real work.",
+    title: "Calculated risk",
+    text: "Joe speaks to builders who understand that meaningful growth requires courage, preparation, patience, and the discipline to think clearly.",
   },
   {
-    title: "Purpose-led business",
-    text: "Joe brings business back to the human layer: faith, family, community, service, and the responsibility to build something that matters.",
+    title: "Perspective through dialogue",
+    text: "Growth requires hard questions, different viewpoints, respectful debate, and the willingness to ask before opportunity passes by.",
   },
 ];
 
 const storyHealthcarePrinciples = [
   {
-    label: "Access",
-    title: "Care begins with getting there",
-    text: "Medical transportation is often the first step in care. General Medical is built around helping patients move safely, reliably, and with dignity.",
+    label: "Pressure",
+    title: "The unfiltered version of business",
+    text: "Before the media platform, Joe learned through long hours, difficult decisions, operations, negotiation, setbacks, and responsibility.",
   },
   {
-    label: "Response",
-    title: "Operations under pressure",
-    text: "Ambulance and transport work demands clear systems, trained teams, and decisions that hold up when timing matters.",
+    label: "Systems",
+    title: "Healthcare transportation as real work",
+    text: "Building in healthcare transportation taught Joe that leadership is measured by execution, trust, timing, and the people depending on the system.",
   },
   {
-    label: "Trust",
-    title: "Support beyond the ride",
-    text: "The mission extends past logistics: patients, families, facilities, and care teams all need consistency they can count on.",
+    label: "Lessons",
+    title: "Experience became the foundation",
+    text: "The lessons from business, family, relationships, and adversity became the foundation for content that helps others build stronger lives.",
   },
 ];
 
 const storyJourneyItems = [
   {
-    year: "1983",
+    year: "Origin",
     title: "Born in Armenia",
-    text: "Joe’s story begins in Armenia, with roots that continue to shape his identity, faith, family values, and sense of community.",
+    text: "Joe’s story did not begin in a studio, on social media, or with a podcast. It began through immigration, adaptation, sacrifice, and the pursuit of opportunity.",
   },
   {
-    year: "Early years",
-    title: "Shaped across cultures",
-    text: "Part of his youth was spent in Russia before life moved him toward the United States, giving him a wider view of people, pressure, and opportunity.",
+    year: "Los Angeles",
+    title: "Raised between worlds",
+    text: "Born in Armenia and eventually growing up in Los Angeles, Joe learned how to rebuild, adjust, and navigate uncertainty from an early age.",
   },
   {
-    year: "Education",
-    title: "Woodbury University",
-    text: "In Burbank, Joe studied Business Management and Administration, then continued with a master’s in Organizational Leadership.",
+    year: "Business",
+    title: "Companies before content",
+    text: "Long before content creation became part of the vision, Joe built companies in healthcare transportation and related industries.",
   },
   {
-    year: "2010",
-    title: "General Medical",
-    text: "He began leading General Medical in Southern California, building around medical transportation, ambulance services, and patient care.",
+    year: "Lessons",
+    title: "Pressure became perspective",
+    text: "Leadership, operations, negotiation, growth, setbacks, and responsibility shaped the way Joe thinks about risk, discipline, and execution.",
   },
   {
     year: "Today",
-    title: "Social Venture Podcast",
-    text: "Joe brings entrepreneurs, builders, and leaders into conversations about business, purpose, community, and the responsibility behind growth.",
+    title: "Social Venture Podcast and beyond",
+    text: "Through podcast conversations, videos, interviews, reflections, and storytelling, Joe shares ideas that help people think deeper, move smarter, and build stronger.",
   },
 ];
 
@@ -165,10 +165,9 @@ export function StoryPage() {
           <p className="storyHeroEyebrow">The story of Joe Mkhitaryan</p>
           <h1>Gagik “Joe” Mkhitaryan</h1>
           <p className="storyHeroText">
-            Serial entrepreneur, healthcare innovator, investor, and host of
-            the Social Venture Podcast. Born in Armenia, shaped across Russia
-            and the United States, Joe builds ventures where business,
-            community, and purpose meet.
+            Born in Armenia and eventually raised in Los Angeles, Joe built his
+            perspective through immigration, adaptation, business, pressure, and
+            the pursuit of opportunity before the podcast ever began.
           </p>
         </div>
       </section>
@@ -176,46 +175,45 @@ export function StoryPage() {
         <div className="storyInfoOneContent">
           <div className="storyInfoIntro">
             <p className="storyInfoEyebrow">About Joe</p>
-            <h2>A life shaped by movement, work, and purpose.</h2>
+            <h2>A life shaped by movement, discipline, and perspective.</h2>
           </div>
 
           <div className="storyInfoBody">
             <p>
-              Gagik “Joe” Mkhitaryan was born in Armenia in 1983, spent part of
-              his youth in Russia, and later moved to the United States. Today,
-              he is known as a serial entrepreneur, healthcare innovator,
-              investor, and host of the Social Venture Podcast.
+              Joe Mkhitaryan’s story did not begin in a studio, on social
+              media, or with a podcast. It began through immigration,
+              adaptation, sacrifice, and the pursuit of opportunity.
             </p>
             <p>
-              He studied at Woodbury University in Burbank, earning a degree in
-              Business Management and Administration, followed by a master’s in
-              Organizational Leadership. Since 2010, Joe has led General Medical
-              in Southern California, building work around medical
-              transportation, ambulance services, and patient care.
+              Born in Armenia and eventually growing up in Los Angeles, Joe
+              experienced firsthand what it means to rebuild, adjust, and learn
+              how to navigate uncertainty. Those experiences shaped the
+              foundation of his mindset: resilience, calculated risk,
+              discipline, and perspective.
             </p>
             <p>
-              Beyond business, Joe is a father of three, fluent in English,
-              Russian, and Armenian, and remains connected to faith, community,
-              and the idea that strong ventures should create meaningful social
-              value.
+              Long before content creation became part of the vision, the focus
+              was business. Joe built companies in healthcare transportation and
+              related industries, learning the realities of leadership,
+              operations, negotiation, growth, setbacks, and responsibility.
             </p>
 
             <div className="storyInfoFacts">
               <div>
-                <span>Born</span>
-                <strong>Armenia, 1983</strong>
+                <span>Origin</span>
+                <strong>Born in Armenia</strong>
               </div>
               <div>
-                <span>Education</span>
-                <strong>Woodbury University</strong>
+                <span>Shaped in</span>
+                <strong>Los Angeles</strong>
               </div>
               <div>
-                <span>Current work</span>
-                <strong>CEO & Co-Founder, General Medical</strong>
+                <span>Business roots</span>
+                <strong>Healthcare transportation</strong>
               </div>
               <div>
-                <span>Languages</span>
-                <strong>English, Russian, Armenian</strong>
+                <span>Philosophy</span>
+                <strong>Life in Moderation</strong>
               </div>
             </div>
           </div>
@@ -245,43 +243,43 @@ export function StoryPage() {
 
           <div className="storyBusinessCopy">
             <p className="storyBusinessEyebrow">Business & impact</p>
-            <h2>Building systems around care, access, and trust.</h2>
+            <h2>Business came before the microphone.</h2>
             <p className="storyBusinessLead">
-              Joe’s work in healthcare grew from a practical belief: the best
-              companies solve hard human problems with discipline, speed, and
-              responsibility.
+              While much of the internet glamorized entrepreneurship, Joe was
+              living the unfiltered version of it: long hours, pressure,
+              difficult decisions, and the constant challenge of building
+              something sustainable.
             </p>
             <p className="storyBusinessText">
-              Through General Medical, he helped shape services around medical
-              transportation, ambulance operations, and patient support. That
-              operating experience now informs how he invests, mentors, and
-              leads conversations with entrepreneurs on the Social Venture
-              Podcast.
+              Over time, Joe realized that the lessons learned through business,
+              leadership, family, friends, relationships, and adversity carried
+              value beyond the companies themselves. Those conversations and
+              experiences became the foundation for a larger mission.
             </p>
 
             <div className="storyBusinessPillars">
               <article>
                 <span>01</span>
-                <h3>Healthcare operations</h3>
+                <h3>Calculated risk</h3>
                 <p>
-                  Building reliable care logistics for people who need safe,
-                  timely medical transportation.
+                  Risk is part of every meaningful life, but it should be
+                  measured, thought through, and backed by preparation.
                 </p>
               </article>
               <article>
                 <span>02</span>
-                <h3>Entrepreneurial discipline</h3>
+                <h3>Operator mindset</h3>
                 <p>
-                  Turning pressure, risk, and fast decisions into systems that
-                  can keep serving beyond one moment.
+                  Calm decision-making, emotional control, long-term strategy,
+                  and problem solving under pressure guide the work.
                 </p>
               </article>
               <article>
                 <span>03</span>
-                <h3>Social venture voice</h3>
+                <h3>Legacy over attention</h3>
                 <p>
-                  Hosting conversations about purpose-led growth, leadership,
-                  family, faith, and community value.
+                  The goal is not temporary popularity. It is building a name,
+                  philosophy, reputation, and body of work that carries meaning.
                 </p>
               </article>
             </div>
@@ -293,24 +291,25 @@ export function StoryPage() {
         <div className="storyHealthcareContent">
           <div className="storyHealthcareHeader">
             <p className="storyHealthcareEyebrow">
-              General Medical / Healthcare Mission
+              Business foundation
             </p>
-            <h2>Healthcare is a system of trust before it is a business.</h2>
+            <h2>Real lessons from real operations.</h2>
           </div>
 
           <div className="storyHealthcareBody">
             <p className="storyHealthcareLead">
-              Since 2010, Joe’s work with General Medical has centered on a
-              practical healthcare need in Southern California: helping people
-              reach care through dependable medical transportation, ambulance
-              services, and patient-centered support.
+              Joe’s business experience in healthcare transportation and related
+              industries taught him that entrepreneurship is not a performance.
+              It is responsibility, execution, relationships, pressure, and the
+              discipline to keep building when life gets difficult.
             </p>
 
             <div className="storyHealthcareStatement">
-              <span>Mission</span>
+              <span>Foundation</span>
               <p>
-                Build healthcare operations that treat movement, timing, safety,
-                and communication as part of the care experience.
+                The experiences that shaped Joe’s companies also shaped the
+                platform: real business, real lessons, real conversations, and a
+                mindset built on purpose, patience, and discipline.
               </p>
             </div>
 
@@ -331,11 +330,11 @@ export function StoryPage() {
         <div className="storyJourneyContent">
           <div className="storyJourneyHeader">
             <p className="storyJourneyEyebrow">Journey</p>
-            <h2>From Armenia to building ventures in Southern California.</h2>
+            <h2>From Armenia to a platform built around growth.</h2>
             <p>
-              The story is not one straight line. It is movement, education,
-              responsibility, family, and the steady work of turning experience
-              into something useful for others.
+              This is not a movement built around perfection. It is built around
+              growth, ownership, perspective, and the belief that if you never
+              ask, you will never find out.
             </p>
           </div>
 
@@ -357,19 +356,20 @@ export function StoryPage() {
         <div className="storyPodcastContent">
           <div className="storyPodcastIntro">
             <p className="storyPodcastEyebrow">Podcast Philosophy</p>
-            <h2>Real conversations for people building with purpose.</h2>
+            <h2>Ideas that stay with people after the content ends.</h2>
             <p>
-              Social Venture Podcast is where Joe brings the same operating
-              mindset into conversation: honest questions, practical lessons,
-              and a deeper look at why people build.
+              Through podcast conversations, videos, interviews, reflections,
+              and storytelling, Joe explores the ideas that shape business,
+              leadership, family, ambition, risk, legacy, and personal
+              development.
             </p>
           </div>
 
           <div className="storyPodcastPanel">
             <p className="storyPodcastStatement">
-              The goal is not only to talk about success. It is to understand
-              the pressure behind leadership, the values behind growth, and the
-              human story behind every venture.
+              The goal is not simply to entertain people for a moment. The goal
+              is to create ideas and frameworks that help people think deeper,
+              move smarter, and build stronger lives.
             </p>
 
             <div className="storyPodcastPrinciples">
