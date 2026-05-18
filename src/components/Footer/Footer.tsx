@@ -18,7 +18,23 @@ const footerResources = [
   "Listener updates",
 ];
 
-const socialLinks = ["YouTube", "Instagram", "LinkedIn"];
+const socialLinks = [
+  {
+    index: "1",
+    title: "YouTube",
+    link: "https://www.youtube.com/@joemkhitaryan"
+  },
+  {
+    index: "2",
+    title: "Instagram",
+    link: "https://www.instagram.com/jmkhitaryan/"
+  },
+  {
+    index: "3",
+    title: "LinkedIn",
+    link: "https://www.linkedin.com/in/joemkhitaryan/"
+  }
+];
 
 export default function Footer() {
   return (
@@ -73,8 +89,8 @@ export default function Footer() {
             <div className="footerColumn">
               <h3>Follow</h3>
               {socialLinks.map((item) => (
-                <a href="#" key={item}>
-                  {item}
+                <a href={item.link} key={item.index} target="_blank">
+                  {item.title}
                 </a>
               ))}
             </div>
