@@ -16,53 +16,53 @@ import "./quizPage.scss";
 
 const quizPageCards = [
   {
-    title: "What is your natural pace?",
-    text: "Find out whether you move best through patience, pressure, or steady daily action.",
+    title: "How do you handle risk?",
+    text: "See whether you avoid risk, rush into it, or prepare well enough to move with clarity.",
     image: quizImage1,
   },
   {
-    title: "How do you read opportunity?",
-    text: "Discover the lens you use when the next move is not obvious yet.",
+    title: "What does success mean to you?",
+    text: "Separate status from control over your time, choices, direction, and values.",
     image: quizImage2,
   },
   {
-    title: "What gives you momentum?",
-    text: "See what pushes you forward when the path gets loud, risky, or unclear.",
+    title: "Can you lead yourself first?",
+    text: "Check how you respond to pressure, emotion, responsibility, and hard decisions.",
     image: quizImage3,
   },
   {
-    title: "Which road are you choosing?",
-    text: "A quick check-in for direction, decisions, and the kind of challenge you are ready for.",
+    title: "Who is shaping your next move?",
+    text: "Look at the relationships, reputation, and network that can strengthen your direction.",
     image: quizImage4,
   },
   {
-    title: "What pace helps you grow?",
-    text: "See whether your next step needs more urgency, patience, or steady consistency.",
+    title: "Where do you need moderation?",
+    text: "Find the balance between ambition and self-control, confidence and humility, push and pause.",
     image: quizCardImage1,
   },
   {
-    title: "How do you see the next chance?",
-    text: "Understand the way you notice opportunity when the path is not fully clear yet.",
+    title: "Do you ask or wait?",
+    text: "Opportunity often belongs to the person willing to ask before fear closes the door.",
     image: quizCardImage2,
   },
   {
-    title: "What creates momentum for you?",
-    text: "Find out what helps you move forward when decisions feel risky or uncomfortable.",
+    title: "What is your operator mindset?",
+    text: "Understand how calmly you solve problems, think long-term, and execute under pressure.",
     image: quizCardImage3,
   },
   {
-    title: "Where should your focus go?",
-    text: "Notice what deserves your energy now and what should wait for a better moment.",
+    title: "What deserves your discipline?",
+    text: "Notice which goal needs clearer systems, stronger habits, and fewer distractions.",
     image: quizCardImage4,
   },
   {
-    title: "Which direction fits this season?",
-    text: "Choose the kind of challenge that matches how you are ready to grow next.",
+    title: "What legacy are you building?",
+    text: "Move past temporary attention and choose the work, reputation, and values that can last.",
     image: quizCardImage5,
   },
   {
-    title: "What action should come first?",
-    text: "Turn your result into a simple next move you can actually use after the quiz.",
+    title: "What move comes first?",
+    text: "Turn your result into one clear next action you can take with courage and preparation.",
     image: quizCardImage6,
   },
 ];
@@ -81,11 +81,12 @@ export function QuizPage() {
         />
         <div className="quizHeroOverlay" aria-hidden="true" />
         <div className="quizHeroContent">
-          <p className="quizHeroEyebrow">Personal direction quiz</p>
-          <h1>Find the signal in how you move.</h1>
+          <p className="quizHeroEyebrow">Builder mindset quiz</p>
+          <h1>Discover how you think, risk, lead, and build.</h1>
           <p>
-            A short quiz built to reveal your pace, perspective, momentum, and
-            the next kind of challenge you are ready to choose.
+            A short quiz built around calculated risk, moderation, leadership,
+            relationships, discipline, and the kind of success that gives you
+            control over your direction.
           </p>
         </div>
       </section>
@@ -94,7 +95,7 @@ export function QuizPage() {
         <div className="quizLibraryContent">
           <div className="quizLibraryHeader">
             <p className="quizLibraryEyebrow">Inside the quiz</p>
-            <h2>Choose the prompt that fits your next move.</h2>
+            <h2>Choose the prompt that reveals your next move.</h2>
           </div>
 
           <div className="quizLibraryGrid">

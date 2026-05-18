@@ -35,89 +35,89 @@ import "./programsPage.scss";
 const progressAreas = [
   {
     icon: Award,
-    title: "Turn ambition into a plan",
-    text: "Joe helps you take the big idea out of your head and shape it into a clear next move.",
+    title: "Turn ambition into discipline",
+    text: "Build the structure to pursue more without losing your values, focus, or self-control.",
   },
   {
     icon: HeartHandshake,
-    title: "Build better relationships",
-    text: "Strengthen how you communicate with partners, clients, teams, and the people closest to you.",
+    title: "Use relationships as leverage",
+    text: "Strengthen reputation, trust, communication, and the network that helps serious builders grow.",
   },
   {
     icon: Brain,
-    title: "Quiet the inner noise",
-    text: "Use Joe's questions and stories to work through doubt, pressure, and fear before they slow you down.",
+    title: "Think clearly under pressure",
+    text: "Use Joe's questions and stories to separate fear, ego, noise, and opportunity before you act.",
   },
   {
     icon: Activity,
-    title: "Protect your energy",
-    text: "Create habits that support clearer thinking, stronger execution, and a healthier daily rhythm.",
+    title: "Practice life in moderation",
+    text: "Create habits that support ambition without self-destruction, confidence without arrogance, and success without emptiness.",
   },
   {
     icon: ShieldCheck,
-    title: "Make smarter money moves",
-    text: "Think through risk, opportunity, and discipline with the practical lens Joe brings to business.",
+    title: "Risk it intelligently",
+    text: "Think through risk, preparation, timing, and execution with the practical lens Joe brings to business.",
   },
   {
     icon: Compass,
-    title: "Find your direction",
-    text: "Connect your work to a purpose you can return to when the path gets loud or uncertain.",
+    title: "Build toward legacy",
+    text: "Connect your work to a direction, reputation, family, philosophy, and body of work that can last.",
   },
 ];
 
 const insightCards = [
   {
     label: "Mindset",
-    title: "The decision filter Joe uses before making a serious move",
-    text: "A practical way to separate pressure from opportunity when everyone has an opinion.",
+    title: "The operator mindset behind calm decisions",
+    text: "A practical way to solve problems under pressure without letting emotion lead the room.",
     image: mindsetImage,
   },
   {
     label: "Business",
-    title: "How to turn one honest conversation into your next strategy",
-    text: "Joe's best interviews keep coming back to clarity, accountability, and action.",
+    title: "There is no bad business, only bad execution",
+    text: "Joe's business lens keeps coming back to leadership, model, customer, market, and discipline.",
     image: businessImage,
   },
   {
     label: "Discipline",
-    title: "Build momentum when motivation is already gone",
-    text: "Small commitments, direct feedback, and the kind of structure that keeps you moving.",
+    title: "Life in moderation is strength",
+    text: "Ambition works better when it is guided by rhythm, restraint, values, and self-control.",
     image: disciplineImage,
   },
   {
     label: "Leadership",
-    title: "What strong founders do when the room gets uncertain",
-    text: "Lead with calm, ask better questions, and make the next step visible for the team.",
+    title: "Leadership begins with self-control",
+    text: "Before you lead a company, family, or movement, you have to lead your own emotions and decisions.",
     image: leadershipImage,
   },
   {
     label: "Purpose",
-    title: "Find the work that deserves your full attention",
-    text: "Use Joe's program prompts to reconnect ambition with a direction that actually fits.",
+    title: "Success is control, not just status",
+    text: "Use Joe's program prompts to reconnect ambition with time, choices, direction, and values.",
     image: purposeImage,
   },
   {
     label: "Accountability",
-    title: "Why your next level needs people who challenge your thinking",
-    text: "The right circle helps you see blind spots faster and commit to stronger decisions.",
+    title: "Relationships compound faster than money",
+    text: "The right people help you see blind spots, open doors, and commit to stronger decisions.",
     image: accountabilityImage,
   },
   {
     label: "Clarity",
-    title: "Turn a loud season into a simple plan you can follow",
-    text: "Joe's framework keeps attention on the few moves that create real progress.",
+    title: "Bring substance back to ambition",
+    text: "Joe's framework keeps attention on clear thinking, principles, and the few moves that matter.",
     image: clarityImage,
   },
   {
     label: "Growth",
-    title: "Use every setback as better data for the next attempt",
-    text: "Progress gets easier when mistakes become signals instead of stop signs.",
+    title: "Build stronger from setbacks",
+    text: "Progress gets easier when pressure, mistakes, and adversity become information instead of identity.",
     image: growthImage,
   },
   {
     label: "Focus",
-    title: "Protect your best hours from work that only feels urgent",
-    text: "A tighter rhythm gives your biggest goals the space they actually need.",
+    title: "Legacy over temporary attention",
+    text: "A tighter rhythm gives meaningful work the space it needs to outlast noise and popularity.",
     image: focusImage,
   },
 ];
@@ -126,39 +126,39 @@ const programsVideoSrc = "/videos/programsVideo.mp4";
 
 const faqItems = [
   {
-    question: "What is Joe Podcast Programs?",
+    question: "What are Joe Mkhitaryan Programs?",
     answer:
-      "It is a focused path built from Joe's conversations around mindset, business, discipline, leadership, and practical execution.",
+      "They are focused paths built from Joe's philosophy around entrepreneurship, leadership, calculated risk, discipline, perspective, and legacy.",
   },
   {
     question: "Do I need to listen to the podcast before joining?",
     answer:
-      "No. The podcast is a great entry point, but the programs are designed to stand on their own with clear prompts, themes, and next steps.",
+      "No. The podcast is a strong entry point, but the programs are designed to stand on their own with clear prompts, principles, and next steps.",
   },
   {
     question: "Who is this built for?",
     answer:
-      "It is for founders, creators, team leaders, and ambitious listeners who want sharper thinking and a more consistent way to act on it.",
+      "It is for entrepreneurs, founders, creators, leaders, students, professionals, and ambitious individuals who want to think better and build stronger.",
   },
   {
     question: "How much time should I set aside each week?",
     answer:
-      "Start with one focused hour. The goal is not to consume more content, but to turn Joe's best ideas into decisions and visible progress.",
+      "Start with one focused hour. The goal is not to consume more content, but to turn principles into decisions, habits, and visible progress.",
   },
   {
     question: "Will the programs help with business and personal growth?",
     answer:
-      "Yes. The work connects both sides because stronger businesses usually need clearer habits, better relationships, and calmer decision-making.",
+      "Yes. The work connects both sides because stronger businesses usually require clearer habits, better relationships, calmer decisions, and stronger character.",
   },
   {
     question: "Can I use this with my team?",
     answer:
-      "Yes. The topics work well for team conversations, founder check-ins, planning sessions, and shared accountability.",
+      "Yes. The topics work well for team conversations, founder check-ins, planning sessions, leadership development, and shared accountability.",
   },
   {
     question: "Where should I start if I am new to Joe?",
     answer:
-      "Start with the podcast, then use the programs page to choose the theme that matches your current season: clarity, discipline, leadership, or growth.",
+      "Start with the podcast, then choose the program theme that matches your current season: calculated risk, moderation, leadership, relationships, clarity, or legacy.",
   },
 ];
 
@@ -222,10 +222,11 @@ export function ProgramsPage() {
         <div className="programsHeroWrapper">
           <div className="programsHeroContent">
             <p className="programsHeroEyebrow">Programs</p>
-            <h1>Build the next version of your business with sharper moves.</h1>
+            <h1>Build character, companies, wisdom, and legacy.</h1>
             <p className="programsHeroText">
-              Focused growth sessions for founders, creators, and teams who want
-              practical strategy, clear direction, and momentum that lasts.
+              Focused growth paths for entrepreneurs, leaders, and builders who
+              want to think clearly, risk intelligently, lead responsibly, and
+              build a life that means something.
             </p>
 
             <div className="programsHeroActions">
@@ -248,16 +249,16 @@ export function ProgramsPage() {
             />
             <div className="programsHeroStats" aria-label="Program highlights">
               <div>
-                <span>Weekly</span>
-                <strong>Strategy</strong>
-              </div>
-              <div>
                 <span>Clear</span>
-                <strong>Action Plans</strong>
+                <strong>Thinking</strong>
               </div>
               <div>
-                <span>Real</span>
-                <strong>Execution</strong>
+                <span>Smart</span>
+                <strong>Risk</strong>
+              </div>
+              <div>
+                <span>Lasting</span>
+                <strong>Legacy</strong>
               </div>
             </div>
           </div>
@@ -266,12 +267,12 @@ export function ProgramsPage() {
       <section className="programsVideoWrapper">
         <div className="programsProgressContent">
           <div className="programsProgressHeader">
-            <p className="programsProgressEyebrow">Growth with Joe</p>
-            <h2>Progress in every area that shapes the person behind the work.</h2>
+            <p className="programsProgressEyebrow">Build with Joe</p>
+            <h2>Programs for the person behind the ambition.</h2>
             <p>
-              The programs are built around the same conversations Joe brings to
-              the podcast: honest decisions, stronger discipline, better
-              relationships, and business moves you can actually execute.
+              The programs are built around the same principles Joe brings to
+              the platform: calculated risk, moderation, self-control,
+              relationships, clear thinking, and meaningful execution.
             </p>
           </div>
 
@@ -302,7 +303,7 @@ export function ProgramsPage() {
           <div className="programsFastTrackOverlay" />
           <div className="programsFastTrackContent">
             <p className="programsFastTrackEyebrow">Joe Inner Circle</p>
-            <h2>Take the fast track to sustainable success.</h2>
+            <h2>Think clearly, move smarter, build stronger.</h2>
             <button
               className="programsFastTrackButton"
               type="button"
@@ -318,7 +319,7 @@ export function ProgramsPage() {
           <div className="programsInsightsHeader">
             <div>
               <p className="programsInsightsEyebrow">Joe&apos;s playbook</p>
-              <h2>Explore field notes</h2>
+              <h2>Explore the principles</h2>
             </div>
             <a className="programsInsightsLink" href="/podcasts">
               Explore all
@@ -384,7 +385,7 @@ export function ProgramsPage() {
             <p className="programsFaqEyebrow">Frequently asked questions</p>
             <h2>FAQs</h2>
             <a className="programsFaqButton" href="/podcasts">
-              Start listening
+              Listen first
             </a>
           </div>
 

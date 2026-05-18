@@ -40,30 +40,30 @@ type PodcastAudioTrack = {
 
 const podcastCards = [
   {
-    label: "Guide",
-    title: "How to make podcast easy",
-    text: "Manage ideas, guests, recordings, and releases with a clean weekly rhythm.",
+    label: "Mission",
+    title: "Real conversations over fake motivation",
+    text: "Joe brings substance back to ambition through business, leadership, risk, discipline, and legacy.",
     image: podcastImage1,
     className: "podcastNewsCardFeatured",
   },
   {
     label: "New episode",
-    title: "Studio talks that move fast",
-    text: "Fresh conversations, sharp business lessons, and direct stories from Joe's guests.",
+    title: "Perspective for builders under pressure",
+    text: "Fresh conversations with entrepreneurs, leaders, and operators who know the cost of building.",
     image: podcastImage2,
     className: "podcastNewsCardWide",
   },
   {
-    label: "Voice",
-    title: "Build your voice on air",
-    text: "Turn pressure, purpose, and practical moves into episodes people remember.",
+    label: "Philosophy",
+    title: "Risk it intelligently",
+    text: "Move forward with courage, but not carelessness. Prepare, think clearly, then take the chance.",
     image: podcastImage3,
     className: "podcastNewsCardTall",
   },
   {
     label: "Latest",
-    title: "Listen to the latest drop",
-    text: "Catch the newest episode and follow the moments that shape the week.",
+    title: "Ideas that last",
+    text: "Listen for concepts you can carry into business, family, leadership, and life.",
     image: podcastImage4,
     className: "podcastNewsCardCompact",
   },
@@ -101,36 +101,36 @@ const basePodcastShorts = [
 ];
 
 const shortTitles = [
-  "One clear move",
-  "Pressure into purpose",
-  "The founder pause",
-  "Better daily rhythm",
-  "Lead with calm",
-  "Energy before output",
-  "Protect your focus",
-  "Build sharper habits",
-  "Talk less, move more",
-  "Reset the room",
-  "The honest answer",
-  "Make the next call",
-  "Small wins compound",
-  "Train your attention",
-  "Use the hard moment",
-  "Ask a cleaner question",
-  "Find the real blocker",
-  "Choose the useful risk",
-  "Keep the promise",
-  "Turn noise into signal",
-  "Decide with less drama",
-  "Make discipline visible",
-  "Hold the standard",
-  "Move through doubt",
-  "Ship the first version",
-  "Protect the morning",
-  "Listen for the lesson",
-  "Own the hard feedback",
-  "Make room for clarity",
-  "Finish the week strong",
+  "Risk it intelligently",
+  "Substance over hype",
+  "The operator mindset",
+  "Life in moderation",
+  "Lead yourself first",
+  "Legacy over attention",
+  "Ask before fear wins",
+  "Build with patience",
+  "Control over status",
+  "Pressure reveals principles",
+  "Relationships compound",
+  "Calculated risk wins",
+  "Think before the move",
+  "Discipline creates freedom",
+  "The cost of ambition",
+  "Perspective under pressure",
+  "Character before success",
+  "Build stronger lives",
+  "Composure over chaos",
+  "The real business lesson",
+  "Ambition without destruction",
+  "Reputation remains",
+  "Move smarter",
+  "Principles before tactics",
+  "Stay calm and build",
+  "Opportunity belongs to askers",
+  "No fake motivation",
+  "Clear thinking first",
+  "Purpose over noise",
+  "Build what lasts",
 ];
 
 const initialVisibleShorts = 8;
@@ -139,26 +139,26 @@ const initialVisibleAudioTracks = 8;
 const audioTracksPerReveal = 8;
 
 const audioTrackTitles = [
-  "A calm start before the big decision",
+  "Calculated risk before the big decision",
   "How Joe reads pressure in business",
-  "The one habit that protects focus",
-  "When the room gets uncertain",
-  "A better way to reset your week",
-  "Why discipline needs a real calendar",
+  "Life in moderation as a strength",
+  "Leadership begins with self-control",
+  "Why relationships are real leverage",
+  "Success is control, not status",
   "The founder conversation nobody wants",
-  "Small signals before a big move",
+  "If you never ask, you never find out",
   "Protecting energy while building fast",
-  "The question behind better leadership",
-  "What momentum sounds like",
-  "A practical note on risk",
+  "The operator mindset under pressure",
+  "What real momentum sounds like",
+  "A practical note on intelligent risk",
   "Turning feedback into cleaner action",
   "How to slow down without stopping",
   "The story behind the next version",
-  "Choosing the work that deserves you",
+  "Choosing work that deserves attention",
   "A short lesson on accountability",
   "Making clarity part of the process",
   "When ambition needs structure",
-  "Finish strong without burning out",
+  "Build without burning yourself out",
 ];
 
 const audioCategories = [
@@ -181,7 +181,7 @@ const podcastAudioTracks: PodcastAudioTrack[] = audioTrackTitles.map((title, ind
     id: `podcast-audio-${index + 1}`,
     title,
     description:
-      "A compact audio note from Joe's podcast world, ready to be replaced by backend media.",
+      "A compact audio note from Joe's podcast world on business, discipline, perspective, risk, and legacy.",
     category: audioCategories[index % audioCategories.length],
     duration: `${Math.floor(4 + index / 3)}:${String(18 + ((index * 7) % 40)).padStart(2, "0")}`,
     audioSrc: `https://www.soundhelix.com/examples/mp3/SoundHelix-Song-${songNumber}.mp3`,
@@ -622,13 +622,14 @@ export function PodcastsPage() {
         <div className="podcastWrapper">
           <div className="podcastNewsHeader">
             <div>
-              <p className="podcastNewsEyebrow">Podcast journal</p>
-              <h1>Best news of this week</h1>
+              <p className="podcastNewsEyebrow">Social Venture Podcast</p>
+              <h1>Real lessons for serious builders</h1>
             </div>
             <div className="podcastNewsIntro">
               <p>
-                Joe&apos;s latest podcast moments, studio stories, and practical
-                ideas gathered into one sharp weekly section.
+                Conversations on entrepreneurship, leadership, calculated risk,
+                discipline, relationships, resilience, faith, and the mindset
+                required to build with purpose.
               </p>
               <a href="#podcast-news" className="podcastNewsButton">
                 Read more
@@ -666,11 +667,12 @@ export function PodcastsPage() {
           <div className="podcastShortsHeader">
             <div>
               <p className="podcastShortsEyebrow">Shorts</p>
-              <h2>Short lessons for bigger moves.</h2>
+              <h2>Short ideas for sharper builders.</h2>
             </div>
             <p>
-              Quick clips from Joe&apos;s conversations, built for fast ideas,
-              sharper decisions, and a cleaner reset between episodes.
+              Quick clips from Joe&apos;s conversations, built around clear
+              thinking, intelligent risk, self-control, perspective, and action
+              you can carry into the day.
             </p>
           </div>
 
@@ -704,11 +706,12 @@ export function PodcastsPage() {
           <div className="podcastAudioHeader">
             <div>
               <p className="podcastAudioEyebrow">Audio notes</p>
-              <h2>Listen to the full rhythm.</h2>
+              <h2>Listen for principles, not hype.</h2>
             </div>
             <p>
-              Twenty lightweight MP3 records with one shared player. Later this
-              list can come straight from your backend without changing the UI.
+              Audio notes from Joe&apos;s world of entrepreneurship, leadership,
+              moderation, risk, discipline, relationships, and building a life
+              that means something.
             </p>
           </div>
 
